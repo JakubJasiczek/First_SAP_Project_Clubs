@@ -1,0 +1,1 @@
+using ClubsApp as service from '../../srv/club_srv';

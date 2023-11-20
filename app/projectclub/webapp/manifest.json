@@ -1,0 +1,185 @@
+{
+  "_version": "1.49.0",
+  "sap.app": {
+    "id": "projectclub",
+    "type": "application",
+    "i18n": {
+        "bundleUrl": "i18n/i18n.properties",
+        "supportedLocales": [
+          ""
+        ],
+        "fallbackLocale": ""
+      },
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.10.6",
+      "toolsId": "3e5bafab-827d-4247-9566-7d2914444213"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/clubapp/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "club-display": {
+          "semanticObject": "club",
+          "action": "display",
+          "title": "{{flpTitle}}",
+          "subTitle": "{{flpSubtitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.118.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.suite.ui.generic.template": {},
+        "sap.ui.comp": {},
+        "sap.ui.generic.app": {},
+        "sap.ui.table": {},
+        "sap.ushell": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "projectclub.i18n.i18n",
+          "supportedLocales": [
+            ""
+          ],
+          "fallbackLocale": ""
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "type": "View",
+        "viewType": "XML",
+        "path": "projectclub.view",
+        "async": true,
+        "viewPath": "projectclub.view",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "clearControlAggregation": false,
+        "transition": "slide",
+				"bypassed": {
+					"target": "notFound"
+				}
+      },
+      "routes": [
+        {
+          "name": "RouteMain_view",
+          "pattern": ":?query:",
+          "target": [
+            "TargetMain_view"
+          ]
+        }, {
+          "pattern": "club/{ID}",
+          "name": "clubPage",
+          "target": "club"
+        }, {
+          "pattern": "createEvent",
+          "name": "createEvent",
+          "target": "event"
+        }
+      ],
+      "targets": {
+        "TargetMain_view": {
+          "level" : 1,
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Main_view",
+          "viewName": "Main_view"
+        },
+        "appHome": {
+          "id": "app",
+          "name": "appHome",
+          "transition":"show"
+        },
+        "notFound": {
+            "id": "notFound",
+            "name": "NotFound",
+            "transition":"show"
+        },
+        "club": {
+          "id": "clubPage",
+          "name": "ClubPage",
+          "Level": 2
+      },
+      "event": {
+        "id": "createEvent",
+        "name": "CreateEvent",
+        "Level": 2
+    }
+      }
+    },
+    "rootView": {
+      "viewName": "projectclub.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "App"
+    }
+  }
+}

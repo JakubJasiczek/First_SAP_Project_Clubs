@@ -1,0 +1,206 @@
+<mvc:View xmlns:core="sap.ui.core" controllerName="projectclub.controller.Main_view"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:tnt="sap.tnt"
+    xmlns:ui="sap.ui.table"
+	height="100%">
+	<Toolbar id="header" height="85px" >
+		<core:Icon id="soccerIcon" src="sap-icon://soccer" size="300%"/>
+		<Title id="headerTitle" text="SOCCER" level="H6" />
+		<ToolbarSpacer id="_headerToolbarSpacer"/>
+		<Button id="createEventButton" text="Create Event" class="sapUiTinyMarginEnd" press="openCreateEvent"/>
+		<Button id="_testButton" text="{i18n>DisplayNotFound}" class="sapUiTinyMarginEnd" press=".onDisplayNotFound"/>
+		<core:Icon id="searchIcon" src="sap-icon://search" size="300%"/>
+		<core:Icon id="profileIcon" src="sap-icon://person-placeholder" size="300%"/>
+	</Toolbar>
+    <SplitApp
+		id="SplitAppDemo"
+		initialDetail="detail"
+		initialMaster="master">
+		<detailPages>
+			<Page
+				id="title"
+				title="Tabela Kluby"
+				backgroundDesign= "Solid"
+				enableScrolling="true">
+				<headerContent>
+					<Button id="clear" 
+							icon="sap-icon://decline" 
+							tooltip="Clear Sorting"
+							press="clearAllSortings"/>
+					<SearchField 
+							id = "search"
+							placeholder="Szukaj"
+							value="{ui>/globalFilter}"
+							search="filterGlobally"
+							width="15rem"/>	
+				</headerContent>
+				<ui:Table
+					id="table"
+					selectionMode="None"
+					rows="{path:'/Clubs'}"
+					visibleRowCountMode="Fixed"
+					width="100%"
+					cellClick="openClubPage"
+					columnSelect="sortTable"
+					rowActionCount="18"
+					>
+					<ui:columns>
+						<ui:Column
+							id="position"
+							width="3rem"
+							resizable="false"
+							sortProperty="position"
+							showSortMenuEntry="false">
+							<Label id="_PositionLabel" text="#" />
+							<ui:template>
+								<Text id="position_text" text="{position}" wrapping="false" />
+							</ui:template>
+						</ui:Column>
+						<ui:Column
+							id="name"
+							width="11rem"
+							sortProperty="name"
+							sortOrder="Ascending"
+							resizable="false"
+							showSortMenuEntry="false">
+							<Label id="_NameLabel" text="Team" />
+							<ui:template>
+								<Text id = "name_text" text="{name}" wrapping="false" />
+							</ui:template>
+						</ui:Column>
+						<ui:Column
+							id="points"
+							width="3rem"
+							sortProperty="points"
+							resizable="false"
+							showSortMenuEntry="false">
+							<Label id="_PointsLabel" text="P" />
+							<ui:template>
+								<Text id = "points_text" text="{points}" wrapping="false" />
+							</ui:template>
+						</ui:Column>
+						<ui:Column 
+							id="match"
+							width="3rem"
+							sortProperty="match"
+							resizable="false"
+							showSortMenuEntry="false">
+							<Label id="_MatchLabel" text="M" />
+							<ui:template>
+								<Text id = "match_text" text="{match}" wrapping="false" />
+							</ui:template>
+						</ui:Column>
+						<ui:Column 
+							id = "win"
+							width="3rem"
+							sortProperty="win"
+							resizable="false"
+							showSortMenuEntry="false">
+							<Label id="_WinLabel" text="W" />
+							<ui:template>
+								<Text id = "win_text" text="{win}" wrapping="false" />
+							</ui:template>
+						</ui:Column>
+						<ui:Column 
+							id = "draw"
+							width="3rem"
+							sortProperty="draw"
+							resizable="false"
+							showSortMenuEntry="false">
+							<Label id="_DrawLabel" text="D" />
+							<ui:template>
+								<Text id = "draw_text" text="{draw}" wrapping="false" />
+							</ui:template>
+						</ui:Column>
+						<ui:Column 
+							id = "lose"
+							width="3rem"
+							sortProperty="lose"
+							resizable="false"
+							showSortMenuEntry="false">
+							<Label id="_LoseLabel" text="L" />
+							<ui:template>
+								<Text id = "false_text" text="{lose}" wrapping="false" />
+							</ui:template>
+						</ui:Column>
+						<ui:Column 
+							id = "gols"
+							width="4.5rem"
+							sortProperty="gols_lose"
+							resizable="false"
+							showSortMenuEntry="false">
+							<Label id="_GolsScoreAndLoseLabel" text="+/-" />
+							<ui:template>
+								<Text id = "gols_text" text="{gols_score}:{gols_lose}" wrapping="false" />
+							</ui:template>
+						</ui:Column>
+						<ui:Column
+							id = "balans" 
+							width="4.5rem"
+							sortProperty="gols_score"
+							resizable="false"
+							showSortMenuEntry="false">
+							<Label id="_BalansLabel" text="B" />
+							<ui:template>
+								<Text id = "balans_text" text="{gols_score}-{gols_lose}" wrapping="false" />
+							</ui:template>
+						</ui:Column>
+					</ui:columns>
+					<ui:footer>
+						<Panel id="footerPanel">
+							<HBox id="_LMGenBox" >
+								<core:Icon 
+									id="lmIcon" 
+									src="sap-icon://color-fill"
+									color="#41CC03"/>
+								<Text 
+									id = "lmText" 
+									text=" Kwalifikacje do LM"/>
+							</HBox>
+							<HBox id="_LKGenBox" >
+								<core:Icon 
+									id="lkIcon" 
+									src="sap-icon://color-fill"
+									color="#5A92FF"/>
+								<Text 
+									id = "lkText" 
+									text=" Kwalifikacje do LK"/>
+							</HBox>
+							<HBox id="_SpadekGenBox" >
+								<core:Icon 
+									id="fallIcon" 
+									src="sap-icon://color-fill"
+									color="#AE0D0D"/>
+								<Text 
+									id = "fallText" 
+									text=" Spadek"/>
+							</HBox>
+						</Panel>
+					</ui:footer>
+				</ui:Table>
+			</Page>
+		</detailPages>
+		<masterPages>
+			<Page
+				id="master"
+				title="Wszystkie Ligi"
+				backgroundDesign= "List">
+                <tnt:NavigationList
+                    id="navigationList"
+                    width="320px"
+                    selectedKey="subItem3"
+					items = "{/Ligi}">
+                    <tnt:NavigationListItem 
+						id="_LigiNavigationListItem" 
+                        text="{name}" 
+                        key="rootItem1" 
+                        icon="sap-icon://employee"
+						select="sortLigi">
+                    </tnt:NavigationListItem>
+                </tnt:NavigationList>
+			</Page>
+		</masterPages>
+	</SplitApp>
+
+</mvc:View>

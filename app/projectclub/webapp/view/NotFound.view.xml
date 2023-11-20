@@ -1,0 +1,19 @@
+<mvc:View
+	xmlns:core="sap.ui.core"
+	controllerName="projectclub.controller.NotFound"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc">
+    <Toolbar id="header" height="85px" >
+		<core:Icon id="soccerIcon" src="sap-icon://soccer" size="300%"/>
+		<Title id="headerTitle" text="SOCCER" level="H6" />
+		<ToolbarSpacer id="_headerToolbarSpacer"/>
+		<Button id="_testButton" text="{i18n>DisplayNotFound}" class="sapUiTinyMarginEnd" press=".onNavBack"/>
+		<core:Icon id="searchIcon" src="sap-icon://search" size="300%"/>
+		<core:Icon id="profileIcon" src="sap-icon://person-placeholder" size="300%"/>
+	</Toolbar>
+	<IllustratedMessage id="_IDGenIllustratedMessage1"
+		title="{i18n>NotFound}"
+		description="{i18n>NotFound.description}">
+    </IllustratedMessage>
+	<Text id="notFoundText" text="{i18n>NotFound.text}"></Text>
+</mvc:View>

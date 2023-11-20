@@ -1,0 +1,192 @@
+<mvc:View
+	xmlns:core="sap.ui.core"
+	controllerName="projectclub.controller.CreateEvent"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+    xmlns:tnt="sap.tnt"
+    xmlns:tab="sap.ui.table"
+    xmlns:f="sap.ui.layout.form">
+    <Toolbar id="header" height="85px" >
+		<core:Icon id="soccerIcon" src="sap-icon://soccer" size="300%"/>
+		<Title id="headerTitle" text="SOCCER" level="H6" />
+		<ToolbarSpacer id="_headerToolbarSpacer"/>
+		<core:Icon id="searchIcon" src="sap-icon://search" size="300%"/>
+		<core:Icon id="profileIcon" src="sap-icon://person-placeholder" size="300%"/>
+	</Toolbar>
+    <SplitApp 
+        id="clubInformationApp"
+        initialDetail="detail"
+        initialMaster="master">
+        <masterPages>
+            <Page
+				id="masterClubInformationPage"
+				title="Wszystkie Ligi"
+				backgroundDesign= "List">
+                <tnt:NavigationList
+                    id="navigationList"
+                    width="320px"
+                    selectedKey="subItem3"
+					items = "{/Ligi}">
+                    <tnt:NavigationListItem 
+						id="_LigiNavigationListItem" 
+                        text="{name}" 
+                        key="rootItem1" 
+                        icon="sap-icon://employee"
+						select="sortLigi">
+                    </tnt:NavigationListItem>
+                </tnt:NavigationList>
+			</Page>
+        </masterPages>
+        <detailPages>
+            <Page 
+                id="detailClubInformationPage"
+                showNavButton="true"
+		        navButtonPress="onNavBack1"
+                title="Wydarzenia">
+                <content>
+                    <IconTabBar 
+                        id="eventMenuTapBar"
+                        headerBackgroundDesign="Transparent">
+                        <items>
+                            <IconTabFilter id="statsTabFilter" text="Stwórz Wydarzenie">
+                                <f:SimpleForm
+                                    id="form"
+                                    maxContainerCols="2"
+                                    editable="true"
+                                    labelSpanL="3" labelSpanM="3"
+                                    emptySpanL="4" emptySpanM="4"
+                                    columnsL="1" columnsM="1">
+
+                                    <f:content>
+                                        
+                                        <Label id="dataTimeEventLabel" text="Event data" required="true"/>
+                                        <DateTimePicker
+                                            id="eventDataAndTimePicker"
+                                            width="100%"
+                                            placeholder="Enter Date &amp; Time of Event" />
+
+                                        <Label id="leagueEventLabel" text="League" required="true"/>
+                                        <Select
+                                            forceSelection="false"
+                                            id="addEventLeagueSelect"
+                                            items="{
+                                                path: '/Ligi',
+                                                sorter: { path: 'name' }
+                                            }"
+                                            change="leagueSelected">
+                                            <core:Item id="addEventLeagueItem"  text="{name}" key="{ID}" />
+                                        </Select>
+
+                                        <Label id="queenEventLabel" text="Queen" required="true"/>
+                                       <Select 
+                                            forceSelection="false"
+                                            id="queenMatchSelect"
+                                            >
+                                            <core:Item id="queenMatchItem" />
+                                        </Select>
+
+                                        <Label id="homeClubEventLabel" text="Home Club" required="true"/>
+                                        <Select 
+                                            forceSelection="false"
+                                            id="homeClubSelect"
+                                            editable="false">
+                                            <core:Item id="homeClubItem" text="{name}" key="{ID}"/>
+                                        </Select>
+
+                                        <Label id="awayClubEventLabel" text="Away Club" required="true"/>
+                                        <Select 
+                                            forceSelection="false"
+                                            id="awayClubSelect"
+                                            editable="false">
+                                            <core:Item id="awayClubItem" text="{name}" key="{ID}"/>
+                                        </Select>
+
+                                        <Label id="buttonsEventLabel"/>
+                                        <Button id="addEventButton" text="Stwórz Wydarzenie" press="onClickAddButton" width="50%"/>
+
+                                    </f:content>
+                                </f:SimpleForm>
+                            </IconTabFilter>
+                                
+                            <IconTabFilter id="tableTabFilter" text="Wypełnij Wydarzenie">
+                                <OverflowToolbar id="oftEditEvent">
+                                    <Button id="editEventButton" text="Edytuj Wydarzenie" type="Transparent" press="onChechButton"/>
+                                    <Button id="deleteEventButton" text="Usuń Wydarzenie" type="Transparent" press="dialogOpen"/>
+                                </OverflowToolbar>
+                                <tab:Table 
+                                    id="eventTable"
+                                    rows="{/Match}"
+                                    width="100%"
+                                    selectionMode="Single">
+                                    
+                                    <tab:columns>
+                                        <tab:Column id="eventNameColumn">
+                                            <Label id="eventNameLabel" text="Mecz"/>
+                                            <tab:template>
+                                                <Text id="eventNameColumnText" text="{homeName}  {homeGols}:{awayGols}   {awayName}"/>
+                                            </tab:template>
+                                        </tab:Column>
+                                    </tab:columns>
+                                </tab:Table>
+                                <Dialog id="helloDialog" title="Edytuj Mecz" resizable="true">
+                                    <f:SimpleForm 
+                                        id="simpleFromDialog"
+                                        maxContainerCols="2"
+                                        editable="true"
+                                        labelSpanL="3" labelSpanM="3"
+                                        emptySpanL="4" emptySpanM="4"
+                                        columnsL="1" columnsM="1">
+                                        <f:content>
+                                            <Label id="dataTimeEventLabelEdit" text="Event data" required="true"/>
+                                            <DateTimePicker
+                                            id="eventDataAndTimePickerEdit"
+                                            width="100%"
+                                            placeholder="Enter Date &amp; Time of Event" />
+                                            <Label id="editLeagueEventLabel" text="League" required="true"/>
+                                            <Select
+                                                forceSelection="false"
+                                                id="editEventLeagueSelect"
+                                                items="{
+                                                    path: '/Ligi',
+                                                    sorter: { path: 'name' }
+                                                }"
+                                                change="editLeagueSelected">
+                                                <core:Item id="editEventLeagueItem"  text="{name}" key="{ID}" />
+                                            </Select>
+
+                                            <Label id="editQueenEventLabel" text="Queen" required="true"/>
+                                            <Select 
+                                                forceSelection="false"
+                                                id="editQueenMatchSelect"
+                                                >
+                                                <core:Item id="editQueenMatchItem" />
+                                            </Select>
+
+                                            <Label id="editHomeClubEventLabel" text="Home Club" required="true"/>
+                                            <Select 
+                                                forceSelection="false"
+                                                id="editHomeClubSelect"
+                                                >
+                                                <core:Item id="editHomeClubItem" text="{name}" key="{ID}"/>
+                                            </Select>
+
+                                            <Label id="editAwayClubEventLabel" text="Away Club" required="true"/>
+                                            <Select 
+                                                forceSelection="false"
+                                                id="editAwayClubSelect"
+                                                >
+                                                <core:Item id="editAwayClubItem" text="{name}" key="{ID}"/>
+                                            </Select>
+                                        </f:content>
+                                    </f:SimpleForm>
+                                    <Button id="editDialogWindowButton" press="dialogClose" text="Edit/Confirm" width="50%"/>
+                                    <Button id="closeDialogWindowButton" press="dialogClose" text="Cancel" width="50%"/>
+                                </Dialog>
+                            </IconTabFilter> 
+                        </items>
+                    </IconTabBar>
+                </content>
+            </Page>
+        </detailPages>
+    </SplitApp>
+</mvc:View>

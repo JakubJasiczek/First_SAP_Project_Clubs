@@ -1,0 +1,203 @@
+<mvc:View
+	xmlns:core="sap.ui.core"
+	controllerName="projectclub.controller.ClubPage"
+	xmlns="sap.m"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:chart="sap.suite.ui.commons"
+    xmlns:tnt="sap.tnt"
+	xmlns:mvc="sap.ui.core.mvc"
+    xmlns:ui="sap.ui.table">
+    <Toolbar id="header" height="85px" >
+        <core:Icon id="soccerIcon" src="sap-icon://soccer" size="300%"/>
+        <Title id="headerTitle" text="SOCCER" level="H6" />
+        <ToolbarSpacer id="_headerToolbarSpacer"/>
+        <core:Icon id="searchIcon" src="sap-icon://search" />
+        <core:Icon id="profileIcon" src="sap-icon://person-placeholder" size="300%"/>
+    </Toolbar>
+    <SplitApp 
+    id="clubInformationApp"
+    initialDetail="detail"
+	initialMaster="master">
+        <masterPages>
+            <Page
+				id="masterClubInformationPage"
+				title="Wszystkie Ligi"
+				backgroundDesign= "List">
+                <tnt:NavigationList
+                    id="navigationList"
+                    width="320px"
+                    selectedKey="subItem3"
+					items = "{/Ligi}">
+                    <tnt:NavigationListItem 
+						id="_LigiNavigationListItem" 
+                        text="{name}" 
+                        key="rootItem1" 
+                        icon="sap-icon://employee"
+						select="sortLigi">
+                    </tnt:NavigationListItem>
+                </tnt:NavigationList>
+			</Page>
+        </masterPages>
+        <detailPages>
+            <Page 
+                id="detailClubInformationPage"
+                showNavButton="true"
+		        navButtonPress="onNavBack1"
+                title="Informacje o klubie">
+                <content>
+                    <Panel id="clubInformationPanel">
+                        <HBox id="informationClubHBox">
+                            <VBox id="clubPageImageVbox" width="10%">
+                                <Image id="clubImage" src="{img>/products/Jagielonia Białystok}" width="100%" />
+                            </VBox>
+                            <VBox id="clubaPageInformationPause" width="1%"></VBox>
+                            <VBox id="clubPageNameVbox">
+                                <Title titleStyle="H3" id="clubName" text="{name}" level="H1"/>
+                                <Text id="clubStadionName" text="Stadion: "/>
+                            </VBox>
+                        </HBox>
+                    </Panel>
+                    <IconTabBar 
+                        id="clubMenuTapBar"
+                        headerBackgroundDesign="Transparent">
+                        <items>
+                            <IconTabFilter id="statsTabFilter" text="Statystyki">
+                                <SegmentedButton id="statsQueensButtonSegmented">
+                                    <items>
+                                        <SegmentedButtonItem id="statsAllQueensButton" text="Wszystkie" />
+                                        <SegmentedButtonItem id="stats5QueensButton" text="5 Ostatnich" />
+                                        <SegmentedButtonItem id="stats10QueensButton" text="10 Ostatnich" />
+                                        <SegmentedButtonItem id="stats15QueensButton" text="15 Ostatnich" />
+                                        <SegmentedButtonItem id="stats20QueensButton" text="20 Ostatnich" />
+                                        <SegmentedButtonItem id="stats25QueensButton" text="25 Ostatnich" />
+                                    </items>
+                                </SegmentedButton>
+                                <HBox id="statisticHBox" >
+                                    <VBox id="matchVBox" width="50%">
+                                        <chart:ChartContainer id="matchChartContainer" showFullScreen="true" showZoom="false">
+                                            <chart:ChartContainerContent id="matchChartContainerContent">
+                                                <chart:content>
+                                                    <viz:VizFrame 
+                                                        id="idMatchVizFrame" 
+                                                        width="auto"
+                                                        vizType="pie"
+                                                        uiConfig="{applicationSet:'fiori'}"
+                                                        vizProperties="{
+                                                            plotArea:{dataLabel:{visible: true,type:'value'},
+                                                                      drawingEffect: 'glossy',
+                                                                      colorPalette: ['#03772E','#FF8000','#FF0000']},
+                                                            title : {text:'Bilans Meczowy'}}"
+                                                        selectData="myOnClickHandler" 
+                                                        renderComplete="handleRenderComplete">
+                                                        <viz:dataset>
+                                                            <viz.data:FlattenedDataset id="flattenMatchData" data="{/Clubs}">
+                                                                <viz.data:dimensions>
+                                                                <viz.data:DimensionDefinition id="matchDimensionDefinition" name="Flavor" value="{name}" />
+                                                                </viz.data:dimensions>
+                                                            <viz.data:measures>
+                                                                    <viz.data:MeasureDefinition id="winMatchMeasureDefinition" name="wins" value="{win}" />
+                                                                    <viz.data:MeasureDefinition id="drawMatchMeasureDefinition" name="draws" value="{draw}" />
+                                                                    <viz.data:MeasureDefinition id="loseMatchMeasureDefinition" name="loses" value="{lose}" />
+                                                            </viz.data:measures>
+                                                            </viz.data:FlattenedDataset>
+                                                        </viz:dataset>
+                                                            
+                                                        <viz:feeds>
+                                                            <viz.feeds:FeedItem id="measureMatchItem1" uid="size" type="Measure" values="wins" />
+                                                            <viz.feeds:FeedItem id="measureMatchItem2" uid="size" type="Measure" values="draws" />
+                                                            <viz.feeds:FeedItem id="measureMatchItem3" uid="size" type="Measure" values="loses" />
+                                                            <viz.feeds:FeedItem id="dimensionMatchItem1" uid="color" type="Dimension" values="Flavor" />
+                                                        </viz:feeds>
+                                                    </viz:VizFrame>
+                                                </chart:content>
+                                            </chart:ChartContainerContent>
+                                        </chart:ChartContainer>
+                                    </VBox>
+                                    <VBox id="golsVBox" width="50%">
+                                        <chart:ChartContainer id="golsChartContainer" showFullScreen="true" showZoom="false">
+                                            <chart:ChartContainerContent id="golsChartContainerContent">
+                                                <chart:content>
+                                                    <viz:VizFrame 
+                                                        id="idGolsVizFrame" 
+                                                        width="auto"
+                                                        vizType="pie"
+                                                        uiConfig="{applicationSet:'fiori'}"
+                                                        vizProperties="{
+                                                            plotArea:{dataLabel:{visible: true,
+                                                                                type:'value'},
+                                                                                drawingEffect: 'glossy',
+                                                                                colorPalette: ['#03772E','#FF0000']},
+                                                            title : {text:'Bilans Bramkowy'}}"
+                                                        selectData="myOnClickHandler" 
+                                                        renderComplete="handleRenderComplete">
+                                                        <viz:dataset>
+                                                            <viz.data:FlattenedDataset id="flattenGolsData" data="{/Clubs}">
+                                                                <viz.data:dimensions>
+                                                                <viz.data:DimensionDefinition id="golsDimensionDefinition" name="Flavor" value="{name}" />
+                                                                </viz.data:dimensions>
+                                                            <viz.data:measures>
+                                                                    <viz.data:MeasureDefinition id="golsMeasureDefinition" name="golsScore" value="{gols_score}" />
+                                                                    <viz.data:MeasureDefinition id="loseMeasureDefinition" name="golsLose" value="{gols_lose}" />
+                                                            </viz.data:measures>
+                                                            </viz.data:FlattenedDataset>
+                                                        </viz:dataset>
+                                                            
+                                                        <viz:feeds>
+                                                            <viz.feeds:FeedItem id="measureGolsItem1" uid="size" type="Measure" values="golsScore" />
+                                                            <viz.feeds:FeedItem id="measureGolsItem2" uid="size" type="Measure" values="golsLose" />
+                                                            <viz.feeds:FeedItem id="dimensionGolsItem1" uid="color" type="Dimension" values="Flavor" />
+                                                        </viz:feeds>
+                                                    </viz:VizFrame>
+                                                </chart:content>
+                                            </chart:ChartContainerContent>
+                                        </chart:ChartContainer>
+                                    </VBox>
+                                </HBox>
+                            </IconTabFilter>
+                            <IconTabFilter id="tableTabFilter" text="Tabela">
+                                <Page
+                                id="clubPageTablePage"
+                                showHeader="false"
+                                backgroundDesign= "Solid"
+                                enableScrolling="true">
+                                    <content>
+                                        <ui:Table 
+                                            id="clubPageTable"
+                                            rows="{path:'/Clubs'}"
+                                            selectionMode="MultiToggle">
+                                            <ui:extension>
+                                                <OverflowToolbar id="ss" style="Clear">
+                                                    <Title id="title" text="Products"/>
+                                                </OverflowToolbar>
+                                            </ui:extension>
+                                            <ui:columns>
+                                                <ui:Column id="clubPageTablePositionColumn">
+                                                    <Label id="positionLabel" text="Product Name" />
+                                                    <ui:template>
+                                                        <Text id="positionText" text="{position}" wrapping="false" />
+                                                    </ui:template>
+                                                </ui:Column>
+                                                <ui:Column id="clubPageTableNameColumn">
+                                                    <Label id="nameLabel" text="Product Name" />
+                                                    <ui:template>
+                                                        <Text id="nameText" text="{name}" wrapping="false" />
+                                                    </ui:template>
+                                                </ui:Column>
+                                            </ui:columns>
+                                        
+                                        </ui:Table>
+                                    </content>
+                                </Page>
+                            </IconTabFilter> 
+                            <IconTabFilter id="resultsTabFilter" text="Wyniki"></IconTabFilter>
+                            <IconTabFilter id="matchesTabFilter" text="Mecze"></IconTabFilter>
+                            <IconTabFilter id="squadTabFilter" text="Skład"></IconTabFilter>
+                        </items>
+                    </IconTabBar>
+                </content>
+            </Page>
+        </detailPages>
+    </SplitApp>
+</mvc:View>

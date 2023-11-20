@@ -1,0 +1,20 @@
+{
+	"products": {
+		"pic1": "https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg",
+		"pic2": "https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6120-large.jpg",
+		"pic3": "https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100-large.jpg",
+		"screw": "https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/screw.jpg",
+        "Jagielonia Białystok": "https://thumbs.img-sprzedajemy.pl/1000x901c/44/fd/7c/herb-jagiellonia-500x625mm-jaga-dekoracje-ozdoby-podlaskie-bialystok-sprzedam-517395170.jpg"
+	},
+	"images": [
+		"https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/bigimgs/273303_low_jpg_srgb.jpg",
+		"https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/bigimgs/273537_low_jpg_srgb.jpg",
+		"https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/bigimgs/274731_high_jpg_eci_rgb.jpg",
+		"https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1603.jpg",
+		"https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2002.jpg",
+		"https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2020.jpg",
+		"https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2025.jpg",
+		"https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2026.jpg",
+		"https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2027.jpg"
+	]
+}
