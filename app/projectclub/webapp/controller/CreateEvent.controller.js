@@ -27,7 +27,7 @@ sap.ui.define([
 		editLeagueSelected:function(oEvent) {
 			let oLeagueID = oEvent.getParameter("selectedItem").getKey();
 			var oItemTemplate = new sap.ui.core.ListItem({text:"{name}",ID:"{ID}"});
-			
+			let i = 1;
 			let oSelect1 = this.byId("editHomeClubSelect");
 			oSelect1.bindItems(`/Ligi(ID=${oLeagueID})/clubs`,oItemTemplate);
 			oSelect1.setEditable("true");
