@@ -48,7 +48,7 @@
                         id="eventMenuTapBar"
                         headerBackgroundDesign="Transparent">
                         <items>
-                            <IconTabFilter id="statsTabFilter" text="Stwórz Wydarzenie">
+                            <IconTabFilter id="addEventTabFilter" text="Stwórz">
                                 <f:SimpleForm
                                     id="form"
                                     maxContainerCols="2"
@@ -102,16 +102,17 @@
                                         </Select>
 
                                         <Label id="buttonsEventLabel"/>
-                                        <Button id="addEventButton" text="Stwórz Wydarzenie" press="onClickAddButton" width="50%"/>
+                                        <Button id="addEventButton" text="Stwórz Wydarzenie" press="onClickAddButton" width="90%"/>
+                                        <Button id="resetSelectsButton" text="Wyczyść" icon="sap-icon://decline" press="restartSelects" width="90%"/>
 
                                     </f:content>
                                 </f:SimpleForm>
                             </IconTabFilter>
                                 
-                            <IconTabFilter id="tableTabFilter" text="Wypełnij Wydarzenie">
+                            <IconTabFilter id="tableTabFilter" text="Edytuj/Usuń">
                                 <OverflowToolbar id="oftEditEvent">
-                                    <Button id="editEventButton" text="Edytuj Wydarzenie" type="Transparent" press="onChechButton"/>
-                                    <Button id="deleteEventButton" text="Usuń Wydarzenie" type="Transparent" press="dialogOpen"/>
+                                    <Button id="editEventButton" text="Edytuj Wydarzenie" type="Transparent" press="onEditEventButton"/>
+                                    <Button id="deleteEventButton" text="Usuń Wydarzenie" type="Transparent" press="onDeleteEventButton"/>
                                 </OverflowToolbar>
                                 <tab:Table 
                                     id="eventTable"
@@ -120,15 +121,23 @@
                                     selectionMode="Single">
                                     
                                     <tab:columns>
+                                        <tab:Column id="eventDataColumn" width="10%">
+                                            <Label id="eventDataColumnLabel" text="Data"/>
+                                            <tab:template>
+                                                <Text id="eventDataColumnText" text="{dateEvent}" />
+                                            </tab:template>
+                                        </tab:Column>
                                         <tab:Column id="eventNameColumn">
-                                            <Label id="eventNameLabel" text="Mecz"/>
+                                            <Label id="eventNameColumnLabel" text="Mecz"/>
                                             <tab:template>
                                                 <Text id="eventNameColumnText" text="{homeName}  {homeGols}:{awayGols}   {awayName}"/>
                                             </tab:template>
                                         </tab:Column>
                                     </tab:columns>
                                 </tab:Table>
-                                <Dialog id="helloDialog" title="Edytuj Mecz" resizable="true">
+                                <Dialog 
+                                    id="editDialog" 
+                                    title="Edytuj Mecz" >
                                     <f:SimpleForm 
                                         id="simpleFromDialog"
                                         maxContainerCols="2"
@@ -158,6 +167,7 @@
                                             <Select 
                                                 forceSelection="false"
                                                 id="editQueenMatchSelect"
+                                                
                                                 >
                                                 <core:Item id="editQueenMatchItem" />
                                             </Select>
@@ -166,6 +176,10 @@
                                             <Select 
                                                 forceSelection="false"
                                                 id="editHomeClubSelect"
+                                                items="{
+                                                path: '/Clubs',
+                                                sorter: { path: 'name' }
+                                                }"
                                                 >
                                                 <core:Item id="editHomeClubItem" text="{name}" key="{ID}"/>
                                             </Select>
@@ -174,6 +188,10 @@
                                             <Select 
                                                 forceSelection="false"
                                                 id="editAwayClubSelect"
+                                                items="{
+                                                path: '/Clubs',
+                                                sorter: { path: 'name' }
+                                                }"
                                                 >
                                                 <core:Item id="editAwayClubItem" text="{name}" key="{ID}"/>
                                             </Select>
@@ -183,6 +201,9 @@
                                     <Button id="closeDialogWindowButton" press="dialogClose" text="Cancel" width="50%"/>
                                 </Dialog>
                             </IconTabFilter> 
+                            <IconTabFilter id="statsTabFilter" text="Dodaj Statystyki">
+                            
+                            </IconTabFilter>
                         </items>
                     </IconTabBar>
                 </content>

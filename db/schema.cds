@@ -18,6 +18,7 @@ entity Clubs : cuid {
 entity Ligi : cuid {
     name : String;
     clubs : Composition of many Clubs on clubs.liga = $self;
+    match : Composition of many Match on match.league_id = $self;
 };
 
 entity Match : cuid {
@@ -26,6 +27,7 @@ entity Match : cuid {
     awayName : String ;
     awayGols : Integer;
     dateEvent : DateTime ;
-    league : String;
+    league : String ;
+    league_id : Association to Ligi;
     round : Integer;
-}
+};
