@@ -46,11 +46,7 @@ sap.ui.define([
 
             sortLigi: function (oEvent) {
                 let oLiga = oEvent.getSource().getBindingContext().getObject();
-                if(oLiga.name === "Wszystkie"){
-                    this.byId("table").bindRows({path:`/Clubs`});
-                } else {
-                    this.byId("table").bindRows({path:`/Ligi(ID=${oLiga.ID})/clubs`});
-                }
+                this.byId("table").bindRows({path:`/Ligi(ID=${oLiga.ID})/clubs`});
                 this.clearAllSortings();
                 this.getView().byId("title").setTitle(oLiga.name);
             },

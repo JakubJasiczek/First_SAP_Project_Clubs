@@ -5,7 +5,7 @@ sap.ui.define([
 	"sap/m/MessageToast"
 ], function (Controller,BaseController, MessageBox, MessageToast) {
 	"use strict";
-
+	var oModel = new sap.ui.model.json.JSONModel();
 	return BaseController.extend("projectclub.controller.CreateEvent", {
 
 		onInit: function () {
@@ -18,7 +18,7 @@ sap.ui.define([
 
 		restartSelects: function(){
 			
-			console.log(this.byId("eventDataAndTimePicker"));
+			//console.log(this.byId("eventDataAndTimePicker"));
 			//this.byId("eventDataAndTimePicker").setProperty("value",null);
 			//this.byId("eventDataAndTimePicker").setLastValue(null);
 			
@@ -29,7 +29,7 @@ sap.ui.define([
 			this.byId("awayClubSelect").setSelectedItem(null);
 		},
 
-		selectItemName: async function(selectID,nameItem){
+		selectItemName: function(selectID,nameItem){
 			var oList = this.getView().byId(selectID);
 			let oFirstItem;
 
@@ -71,7 +71,9 @@ sap.ui.define([
 		onClickAddButton: function () {
 			let oHomeClubSelectedItem = this.byId("homeClubSelect").getSelectedItem();
 			let oAwayClubSelectedItem = this.byId("awayClubSelect").getSelectedItem();
-			//let dataValue = this.byId("eventDataAndTimePicker").getProperty("value");
+			let that = this;
+			let dataValue = this.byId("eventDataAndTimePicker").getProperty("value");
+			console.log(dataValue)
 
 			if(oHomeClubSelectedItem === null || oAwayClubSelectedItem === null /*|| dataValue === ""*/){
 				MessageBox.error("Wybierz Dane.", {
@@ -105,6 +107,7 @@ sap.ui.define([
 					"awayName" : awayClubName ,
 					"league" : leagueName,
 					"league_id_ID" : leagueID,
+					"dateEvent" : dataValue ,
 				};
 
 				$.ajax({
@@ -115,6 +118,7 @@ sap.ui.define([
 					contentType: "application/json",
 					success: function () {
 						MessageToast.show("Utworzono wydarzenie.");
+						that.refresh();
 					},
 					error: function () {
 						MessageToast.show("Server Send Error");
@@ -124,15 +128,25 @@ sap.ui.define([
 			}
 		},
 
-		onEditEventButton: function() {
+		onEventButton: function(oEvent) {
 			let rowIndex = this.byId("eventTable").getSelectedIndex();
-			var oModel = new sap.ui.model.json.JSONModel();
-			
-			if(rowIndex !== -1){
-				let clubPath = this.byId("eventTable").getContextByIndex(rowIndex).getPath();
-				let matchID = clubPath.substr(7,36);
+			if(rowIndex === -1){
+				MessageToast.show("Brak wyboru wydazrenia.");
+				return;
+			}
+
+			let textButton = oEvent.getSource().getId().substr(37);
+			let clubPath = this.byId("eventTable").getContextByIndex(rowIndex).getPath();
+
+			if(textButton==="editEventButton"){this.onEditEventButton(clubPath)}
+			else if(textButton==="deleteEventButton"){this.onDeleteEventButton(clubPath)}
+			else if(textButton==="addEventStatsButtton"){this.onAddStatsEventButton(clubPath)}
+		},
+
+		onEditEventButton: function(clubPath) {	
+			let matchID = clubPath.substr(7,36);
 				
-				$.ajax({
+			$.ajax({
 				type: "GET",
 				contentType: "application/json",
 				url: `/odata/v4/clubapp/Match/${matchID}`,
@@ -141,53 +155,114 @@ sap.ui.define([
 				success: function(data) {
 					oModel.setData(data);
 					MessageToast.show("Pobrano dane");
-					}
-				});
-			}	
+				}
+			});
 			this.dialogOpen(oModel)
 		},
 
-		onDeleteEventButton: function(){
-			let rowIndex = this.byId("eventTable").getSelectedIndex();
-			if(rowIndex === -1){
-				MessageToast.show("Brak wyboru wydazrenia!!!");
-				return;
-			}
-			let clubPath = this.byId("eventTable").getContextByIndex(rowIndex).getPath();
-
+		onDeleteEventButton: function(clubPath){	
+			let that = this
 			MessageBox.warning("Czy napewno chcesz usunąć wydarzenie?", {
 				actions: [MessageBox.Action.YES, MessageBox.Action.CANCEL],
-				onClose: function () {
-					let matchID = clubPath.substr(7,36);
-					$.ajax({
-						url: `/odata/v4/clubapp/Match/${matchID}`,
-						type: 'DELETE',
-						success: function() {
-							MessageToast.show("Wydarzenie usunięto!");
-						}
-					});
+				onClose: function (sAction) {
+					if(sAction === "YES"){
+						let matchID = clubPath.substr(7,36);
+						$.ajax({
+							url: `/odata/v4/clubapp/Match/${matchID}`,
+							type: 'DELETE',
+							success: function() {
+								MessageToast.show("Wydarzenie usunięto!");
+								that.refresh()
+							}
+						});
+						//this.refresh();
+					} else {
+						return;
+					}
 				}
 			});
+			
+			
+		},
+
+		onAddStatsEventButton: function(clubPath){
+			
+		},
+
+		refresh: function(){
+			this.byId("eventTable").getBinding("rows").refresh();
 		},
 
 		dialogOpen: function (oModel) {
-			if(oModel.getData().ID !== undefined){
-				var oDialog = this.getView().byId("editDialog");
+			var oDialog = this.getView().byId("editDialog");
+			this.selectItemName("editEventLeagueSelect",oModel.getData().league);
+			this.editLeagueSelected();
+			setTimeout(()=>{
+				this.selectItemName("editHomeClubSelect",oModel.getData().homeName);
+				this.selectItemName("editAwayClubSelect",oModel.getData().awayName);
+			},"250");
+			oDialog.open();
+		},
 
-				console.log(oModel.getData())
-				
-				this.selectItemName("editEventLeagueSelect",oModel.getData().league);
-				this.editLeagueSelected();
-				setTimeout(()=>{
-					this.selectItemName("editHomeClubSelect",oModel.getData().homeName);
-					this.selectItemName("editAwayClubSelect",oModel.getData().awayName);
-				},"250");
-				oDialog.open();
+		dialogEdit: function () {
+			let oEditHomeClubSelectedItem = this.byId("editHomeClubSelect").getSelectedItem();
+			let oEditAwayClubSelectedItem = this.byId("editAwayClubSelect").getSelectedItem();
+			//let dataValue = this.byId("eventDataAndTimePicker").getProperty("value");
 
-			} else {
-				MessageToast.show("Brak wyboru wydazrenia!!!");
+			if(oEditHomeClubSelectedItem === null || oEditAwayClubSelectedItem === null /*|| dataValue === ""*/){
+				MessageBox.error("Wybierz Dane Klubów.", {
+					actions: [ MessageBox.Action.CLOSE]
+				});
+				return;
 			}
-			
+
+			let oEditHomeClubItem = oEditHomeClubSelectedItem.getBindingContext().getObject();
+			let oEditAwayClubItem = oEditAwayClubSelectedItem.getBindingContext().getObject();
+			let editAwayClubName = oEditAwayClubItem.name;
+			let editHomeClubName = oEditHomeClubItem.name;
+			let editAwayClubID = oEditAwayClubItem.ID;
+			let editHomeClubID = oEditHomeClubItem.ID;
+			let leagueName = this.byId("editEventLeagueSelect").getSelectedItem().getProperty("text");
+			let leagueID = this.byId("editEventLeagueSelect").getSelectedItem().getKey();
+
+			if(editHomeClubID===editAwayClubID){
+				MessageBox.error("Nie można edytować wydarzenia. Błędne wybranie danych.", {
+					actions: [ MessageBox.Action.CLOSE],
+					emphasizedAction: MessageBox.Action.CLOSE,
+					onClose: function () {
+						
+					}
+				});
+			} else if(editAwayClubName !== oModel.getData().awayName || editHomeClubName !== oModel.getData().homeName ){
+				let oPayload = {
+					/*"dateEvent" : dataValue,*/
+					"homeName" : editHomeClubName,
+					"awayName" : editAwayClubName,
+					"league" : leagueName,
+					"league_id_ID" : leagueID,
+				};
+
+				$.ajax({
+					url: `/odata/v4/clubapp/Match(${oModel.getData().ID})`,
+					type: "PUT",
+					processData: false,
+					dataType: "json", 
+					contentType: "application/json",
+					data: JSON.stringify(oPayload),
+					success: function () {
+						MessageToast.show("Edytowano wydarzenie.");
+					},
+					error: function () {
+						MessageToast.show("Server Send Error");
+					}
+				  });
+				  this.getView().byId("editDialog").close();
+			} else {
+				MessageBox.warning("Nie edytowano wydarzenia.", {
+					actions: [ MessageBox.Action.CANCEL],
+					
+				});
+			}
 		},
 
 		dialogClose: function () {
@@ -196,11 +271,8 @@ sap.ui.define([
 
 		sortLigi: function (oEvent) {
 			let oLiga = oEvent.getSource().getBindingContext().getObject();
-            if(oLiga.name === "Wszystkie"){
-				this.byId("eventTable").bindRows({path:`/Match`});
-			} else {
-				this.byId("eventTable").bindRows({path:`/Ligi(ID=${oLiga.ID})/match`});
-			}
+            this.byId("eventTable").bindRows({path:`/Match`});
+			this.byId("eventTable").bindRows({path:`/Ligi(ID=${oLiga.ID})/match`});
 		}
 		
 	});

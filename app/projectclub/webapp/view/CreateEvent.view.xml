@@ -63,6 +63,7 @@
                                         <DateTimePicker
                                             id="eventDataAndTimePicker"
                                             width="100%"
+                                            valueFormat="YYYY/MM/DD/hh:mm:ss"
                                             placeholder="Enter Date &amp; Time of Event" />
 
                                         <Label id="leagueEventLabel" text="League" required="true"/>
@@ -104,15 +105,17 @@
                                         <Label id="buttonsEventLabel"/>
                                         <Button id="addEventButton" text="Stwórz Wydarzenie" press="onClickAddButton" width="90%"/>
                                         <Button id="resetSelectsButton" text="Wyczyść" icon="sap-icon://decline" press="restartSelects" width="90%"/>
-
+                                        
                                     </f:content>
                                 </f:SimpleForm>
                             </IconTabFilter>
                                 
                             <IconTabFilter id="tableTabFilter" text="Edytuj/Usuń">
                                 <OverflowToolbar id="oftEditEvent">
-                                    <Button id="editEventButton" text="Edytuj Wydarzenie" type="Transparent" press="onEditEventButton"/>
-                                    <Button id="deleteEventButton" text="Usuń Wydarzenie" type="Transparent" press="onDeleteEventButton"/>
+                                    <Button id="refreshMatchTableButton" icon="sap-icon://refresh" press="refresh" />
+                                    <Button id="editEventButton" text="Edytuj" type="Transparent" press="onEventButton"/>
+                                    <Button id="deleteEventButton" text="Usuń" type="Transparent" press="onEventButton"/>
+                                    <Button id="addEventStatsButtton" text="Dodaj Statystyki" press="onEventButton"/>
                                 </OverflowToolbar>
                                 <tab:Table 
                                     id="eventTable"
@@ -197,13 +200,10 @@
                                             </Select>
                                         </f:content>
                                     </f:SimpleForm>
-                                    <Button id="editDialogWindowButton" press="dialogClose" text="Edit/Confirm" width="50%"/>
+                                    <Button id="editDialogWindowButton" press="dialogEdit" text="Edit/Confirm" width="50%"/>
                                     <Button id="closeDialogWindowButton" press="dialogClose" text="Cancel" width="50%"/>
                                 </Dialog>
                             </IconTabFilter> 
-                            <IconTabFilter id="statsTabFilter" text="Dodaj Statystyki">
-                            
-                            </IconTabFilter>
                         </items>
                     </IconTabBar>
                 </content>

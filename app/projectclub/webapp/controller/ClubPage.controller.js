@@ -25,25 +25,22 @@ sap.ui.define([
 				
 			})
 			let clubID = oEvent.getParameter("arguments").ID
-			setTimeout(() => {
-				var oModel = new sap.ui.model.json.JSONModel();
-				let oData = this.getView().getBindingContext().getObject();
-				console.log(this.getView().getBindingContext().getObject());
-				var data = {
-					'Clubs' : [{
-						"win": oData.win,
-						"lose": oData.lose, 
-						"draw": oData.draw,
-						"gols_lose": oData.gols_lose,
-						"gols_score": oData.gols_score
-						}]};
-				oModel.setData(data);
-				let oMatchVizFrame = this.byId('idMatchVizFrame');
-				oMatchVizFrame.setModel(oModel);
-				let oGolsVizFrame = this.byId("idGolsVizFrame");
-				oGolsVizFrame.setModel(oModel);
-			  }, "1000");
-			//this.byId("flattenMatchData").bindData({path:`/Clubs(ID=${oEvent.getParameter("arguments").ID})`});
+			var oModel = new sap.ui.model.json.JSONModel();
+			let that = this;
+				$.ajax({
+					type: "GET",
+					contentType: "application/json",
+					url: `/odata/v4/clubapp/Clubs/${clubID}`,
+					dataType: "json",
+					async: false,
+					success: function(data) {
+						oModel.setData({'Clubs' : [data]});
+						let oMatchVizFrame = that.byId('idMatchVizFrame');
+						let oGolsVizFrame = that.byId("idGolsVizFrame");
+						oMatchVizFrame.setModel(oModel);
+						oGolsVizFrame.setModel(oModel);
+					}
+				});
 		},
 
 		filterGlobally: function(oEvent) {
