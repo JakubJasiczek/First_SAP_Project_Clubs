@@ -2,14 +2,30 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
     "projectclub/controller/BaseController",
 	"sap/m/MessageBox",
-	"sap/m/MessageToast"
-], function (Controller,BaseController, MessageBox, MessageToast) {
+	"sap/m/MessageToast",
+	'sap/ui/model/json/JSONModel',
+	"sap/ui/table/library",
+	'sap/ui/core/date/UI5Date'
+], function (Controller,BaseController, MessageBox, MessageToast, JSONModel, library, UI5Date) {
 	"use strict";
-	var oModel = new sap.ui.model.json.JSONModel();
+	var oModel = new JSONModel();
 	return BaseController.extend("projectclub.controller.CreateEvent", {
 
 		onInit: function () {
+			var oTimeModel = new JSONModel();
+			oTimeModel.setData({
+				valueDTP2: UI5Date.getInstance(),
+			});
+
+			this.byId("eventDataAndTimePicker").setModel(oTimeModel);
+			this.byId("eventDataAndTimePicker").setProperty("dateValue",null);
+			this.byId("eventDataAndTimePickerEdit").setModel(oTimeModel);
+			this.byId("eventDataAndTimePickerEdit").setProperty("dateValue",null);
 			
+		},
+
+		test:function(){
+			console.log(this.byId("eventDataAndTimePicker").getProperty("value"))
 		},
 
 		onNavBack1: function(){ 
@@ -17,10 +33,8 @@ sap.ui.define([
 		},
 
 		restartSelects: function(){
-			
-			//console.log(this.byId("eventDataAndTimePicker"));
-			//this.byId("eventDataAndTimePicker").setProperty("value",null);
-			//this.byId("eventDataAndTimePicker").setLastValue(null);
+			this.byId("eventDataAndTimePicker").setProperty("dateValue",null);
+			this.byId("eventDataAndTimePicker").setProperty("value",null);
 			
 			this.byId("addEventLeagueSelect").setSelectedItem(null);
 			this.byId("homeClubSelect").setProperty("editable",false);
@@ -72,10 +86,10 @@ sap.ui.define([
 			let oHomeClubSelectedItem = this.byId("homeClubSelect").getSelectedItem();
 			let oAwayClubSelectedItem = this.byId("awayClubSelect").getSelectedItem();
 			let that = this;
-			let dataValue = this.byId("eventDataAndTimePicker").getProperty("value");
-			console.log(dataValue)
+			let dataValue = this.byId("eventDataAndTimePicker").getProperty("dateValue");
+			
 
-			if(oHomeClubSelectedItem === null || oAwayClubSelectedItem === null /*|| dataValue === ""*/){
+			if(oHomeClubSelectedItem === null || oAwayClubSelectedItem === null || dataValue === null){
 				MessageBox.error("Wybierz Dane.", {
 					actions: [ MessageBox.Action.CLOSE]
 				});
@@ -90,6 +104,7 @@ sap.ui.define([
 			let homeClubID = oHomeClubItem.ID;
 			let leagueName = this.byId("addEventLeagueSelect").getSelectedItem().getProperty("text");
 			let leagueID = this.byId("addEventLeagueSelect").getSelectedItem().getKey();
+			let dataValueString = this.byId("eventDataAndTimePicker").getProperty("value");
 			
 			if(homeClubID===awayClubID){
 				MessageBox.error("Nie można stworzyć wydarzenia. Błędne wybranie danych.", {
@@ -104,10 +119,13 @@ sap.ui.define([
 
 					/*"dateEvent" : dataValue,*/
 					"homeName" : homeClubName ,
+					"home_ID" : homeClubID,
 					"awayName" : awayClubName ,
+					"away_ID" : awayClubID,
 					"league" : leagueName,
 					"league_id_ID" : leagueID,
 					"dateEvent" : dataValue ,
+					"dateEventString" : dataValueString ,
 				};
 
 				$.ajax({
@@ -145,7 +163,7 @@ sap.ui.define([
 
 		onEditEventButton: function(clubPath) {	
 			let matchID = clubPath.substr(7,36);
-				
+			let that = this;	
 			$.ajax({
 				type: "GET",
 				contentType: "application/json",
@@ -155,13 +173,16 @@ sap.ui.define([
 				success: function(data) {
 					oModel.setData(data);
 					MessageToast.show("Pobrano dane");
+					that.dialogOpen(oModel);
+				},
+				error: function () {
+					MessageToast.show("Server Send Error");
 				}
 			});
-			this.dialogOpen(oModel)
 		},
 
 		onDeleteEventButton: function(clubPath){	
-			let that = this
+			let that = this;
 			MessageBox.warning("Czy napewno chcesz usunąć wydarzenie?", {
 				actions: [MessageBox.Action.YES, MessageBox.Action.CANCEL],
 				onClose: function (sAction) {
@@ -173,16 +194,14 @@ sap.ui.define([
 							success: function() {
 								MessageToast.show("Wydarzenie usunięto!");
 								that.refresh()
+							},
+							error: function () {
+								MessageToast.show("Server Send Error");
 							}
 						});
-						//this.refresh();
-					} else {
-						return;
-					}
+					} else {return;}
 				}
 			});
-			
-			
 		},
 
 		onAddStatsEventButton: function(clubPath){
@@ -191,25 +210,28 @@ sap.ui.define([
 
 		refresh: function(){
 			this.byId("eventTable").getBinding("rows").refresh();
+			this.byId("eventTable").sort(this.byId("eventDataColumn"), library.SortOrder.Descending, true);
 		},
 
 		dialogOpen: function (oModel) {
 			var oDialog = this.getView().byId("editDialog");
 			this.selectItemName("editEventLeagueSelect",oModel.getData().league);
+			this.byId("eventDataAndTimePickerEdit").setProperty("dateValue",UI5Date.getInstance(oModel.getData().dateEvent));
 			this.editLeagueSelected();
 			setTimeout(()=>{
 				this.selectItemName("editHomeClubSelect",oModel.getData().homeName);
 				this.selectItemName("editAwayClubSelect",oModel.getData().awayName);
-			},"250");
-			oDialog.open();
+				oDialog.open();
+			},"1000");
 		},
 
 		dialogEdit: function () {
 			let oEditHomeClubSelectedItem = this.byId("editHomeClubSelect").getSelectedItem();
 			let oEditAwayClubSelectedItem = this.byId("editAwayClubSelect").getSelectedItem();
-			//let dataValue = this.byId("eventDataAndTimePicker").getProperty("value");
+			let dataValue = this.byId("eventDataAndTimePickerEdit").getProperty("dateValue");
+			let that = this;
 
-			if(oEditHomeClubSelectedItem === null || oEditAwayClubSelectedItem === null /*|| dataValue === ""*/){
+			if(oEditHomeClubSelectedItem === null || oEditAwayClubSelectedItem === null || dataValue === null){
 				MessageBox.error("Wybierz Dane Klubów.", {
 					actions: [ MessageBox.Action.CLOSE]
 				});
@@ -224,6 +246,7 @@ sap.ui.define([
 			let editHomeClubID = oEditHomeClubItem.ID;
 			let leagueName = this.byId("editEventLeagueSelect").getSelectedItem().getProperty("text");
 			let leagueID = this.byId("editEventLeagueSelect").getSelectedItem().getKey();
+			let dataValueString = this.byId("eventDataAndTimePickerEdit").getProperty("value");
 
 			if(editHomeClubID===editAwayClubID){
 				MessageBox.error("Nie można edytować wydarzenia. Błędne wybranie danych.", {
@@ -233,13 +256,17 @@ sap.ui.define([
 						
 					}
 				});
-			} else if(editAwayClubName !== oModel.getData().awayName || editHomeClubName !== oModel.getData().homeName ){
+			} else if(editAwayClubName !== oModel.getData().awayName || editHomeClubName !== oModel.getData().homeName || dataValue !== oModel.getData().dateEvent){
 				let oPayload = {
 					/*"dateEvent" : dataValue,*/
 					"homeName" : editHomeClubName,
+					"home_ID" : editHomeClubID,
 					"awayName" : editAwayClubName,
+					"away_ID" : editAwayClubID,
 					"league" : leagueName,
 					"league_id_ID" : leagueID,
+					"dateEvent" : dataValue ,
+					"dateEventString" : dataValueString ,
 				};
 
 				$.ajax({
@@ -251,6 +278,7 @@ sap.ui.define([
 					data: JSON.stringify(oPayload),
 					success: function () {
 						MessageToast.show("Edytowano wydarzenie.");
+						that.refresh();
 					},
 					error: function () {
 						MessageToast.show("Server Send Error");
@@ -260,7 +288,6 @@ sap.ui.define([
 			} else {
 				MessageBox.warning("Nie edytowano wydarzenia.", {
 					actions: [ MessageBox.Action.CANCEL],
-					
 				});
 			}
 		},
@@ -271,8 +298,9 @@ sap.ui.define([
 
 		sortLigi: function (oEvent) {
 			let oLiga = oEvent.getSource().getBindingContext().getObject();
-            this.byId("eventTable").bindRows({path:`/Match`});
 			this.byId("eventTable").bindRows({path:`/Ligi(ID=${oLiga.ID})/match`});
+			let oColumnData = this.byId("eventDataColumn");
+			this.byId("eventTable").sort(oColumnData, library.SortOrder.Descending,false);
 		}
 		
 	});

@@ -2,7 +2,6 @@ namespace db.club;
 
 using {cuid} from '@sap/cds/common';
 entity Clubs : cuid { 
-
     position : Integer;
     name : String;
     points : Integer;
@@ -13,6 +12,8 @@ entity Clubs : cuid {
     gols_score : Integer;
     gols_lose : Integer;
     liga : Association to Ligi;
+    matchesHome : Composition of many Match on matchesHome.home = $self ;
+    matchesAway : Composition of many Match on matchesAway.away = $self;
 };
 
 entity Ligi : cuid {
@@ -23,10 +24,13 @@ entity Ligi : cuid {
 
 entity Match : cuid {
     homeName : String ;
+    home : Association to Clubs ;
     homeGols : Integer;
     awayName : String ;
+    away : Association to Clubs ;
     awayGols : Integer;
     dateEvent : DateTime ;
+    dateEventString : String;
     league : String ;
     league_id : Association to Ligi;
     round : Integer;

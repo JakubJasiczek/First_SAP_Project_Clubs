@@ -4,7 +4,8 @@
 		"pic2": "https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6120-large.jpg",
 		"pic3": "https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100-large.jpg",
 		"screw": "https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/screw.jpg",
-        "Jagielonia Białystok": "https://thumbs.img-sprzedajemy.pl/1000x901c/44/fd/7c/herb-jagiellonia-500x625mm-jaga-dekoracje-ozdoby-podlaskie-bialystok-sprzedam-517395170.jpg"
+        "Jagielonia Białystok": "https://thumbs.img-sprzedajemy.pl/1000x901c/44/fd/7c/herb-jagiellonia-500x625mm-jaga-dekoracje-ozdoby-podlaskie-bialystok-sprzedam-517395170.jpg",
+		"PL": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f2/Premier_League_Logo.svg/280px-Premier_League_Logo.svg.png"
 	},
 	"images": [
 		"https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/bigimgs/273303_low_jpg_srgb.jpg",

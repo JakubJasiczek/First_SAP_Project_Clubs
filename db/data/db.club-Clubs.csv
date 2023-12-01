@@ -1,4 +1,4 @@
-ID;position;name;points;match;win;draw;lose;gols_score;gols_lose;liga_ID
+ID;position;name;points;match;win;draw;lose;gols_score;gols_lose;liga_ID;
 ff0c0960-8cc3-4573-93b6-314195f7f6c1;1;Śląsk Wrocław;23;11;7;2;2;18;10;66b64b3f-1520-4cd7-aebd-3c9d95910692
 b9da07e1-e7d5-445f-bd48-cf7cf1a3e59a;4;Legia Warszawa;20;10;6;2;2;19;11;66b64b3f-1520-4cd7-aebd-3c9d95910692
 fa4ad6b8-1452-4768-8d18-c2c739f78dfe;2;Raków Częstochowa;22;10;7;1;2;22;12;66b64b3f-1520-4cd7-aebd-3c9d95910692

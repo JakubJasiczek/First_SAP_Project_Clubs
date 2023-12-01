@@ -63,8 +63,15 @@
                                         <DateTimePicker
                                             id="eventDataAndTimePicker"
                                             width="100%"
-                                            valueFormat="YYYY/MM/DD/hh:mm:ss"
-                                            placeholder="Enter Date &amp; Time of Event" />
+                                            value= "{
+                                                'path': '/valueDTP2',
+                                                'type': 'sap.ui.model.type.DateTime',
+                                                'formatOptions': {
+                                                    'pattern': 'd MMM yyyy, HH:mm'
+                                                }
+                                            }"
+                                            minutesStep="5"
+                                            secondsStep="60" />
 
                                         <Label id="leagueEventLabel" text="League" required="true"/>
                                         <Select
@@ -104,7 +111,7 @@
 
                                         <Label id="buttonsEventLabel"/>
                                         <Button id="addEventButton" text="Stwórz Wydarzenie" press="onClickAddButton" width="90%"/>
-                                        <Button id="resetSelectsButton" text="Wyczyść" icon="sap-icon://decline" press="restartSelects" width="90%"/>
+                                        <Button id="resetSelectsButton" text="Wyczyść" icon="sap-icon://decline" press="test" width="90%"/>
                                         
                                     </f:content>
                                 </f:SimpleForm>
@@ -119,18 +126,25 @@
                                 </OverflowToolbar>
                                 <tab:Table 
                                     id="eventTable"
-                                    rows="{/Match}"
+                                    rows="{
+                                        path: '/Match',
+                                        sorter:{
+                                            path:'dateEvent',
+                                            descending : true
+                                        }
+                                    }"
                                     width="100%"
-                                    selectionMode="Single">
+                                    selectionMode="Single"
+                                    >
                                     
                                     <tab:columns>
-                                        <tab:Column id="eventDataColumn" width="10%">
+                                        <tab:Column id="eventDataColumn" width="20%" sortProperty="dateEvent" resizable="false" sorted="true" sortOrder="Descending">
                                             <Label id="eventDataColumnLabel" text="Data"/>
                                             <tab:template>
-                                                <Text id="eventDataColumnText" text="{dateEvent}" />
+                                                <Text id="eventDataColumnText" text="{dateEventString}" />
                                             </tab:template>
                                         </tab:Column>
-                                        <tab:Column id="eventNameColumn">
+                                        <tab:Column id="eventNameColumn" >
                                             <Label id="eventNameColumnLabel" text="Mecz"/>
                                             <tab:template>
                                                 <Text id="eventNameColumnText" text="{homeName}  {homeGols}:{awayGols}   {awayName}"/>
@@ -153,7 +167,15 @@
                                             <DateTimePicker
                                             id="eventDataAndTimePickerEdit"
                                             width="100%"
-                                            placeholder="Enter Date &amp; Time of Event" />
+                                            value= "{
+                                                'path': '/valueDTP2',
+                                                'type': 'sap.ui.model.type.DateTime',
+                                                'formatOptions': {
+                                                    'pattern': 'dd.MM.yyyy HH:mm'
+                                                }
+                                            }"
+                                            minutesStep="5"
+                                            secondsStep="60" />
                                             <Label id="editLeagueEventLabel" text="League" required="true"/>
                                             <Select
                                                 forceSelection="false"

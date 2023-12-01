@@ -44,7 +44,11 @@
 					cellClick="openClubPage"
 					columnSelect="sortTable"
 					rowActionCount="18"
+					alternateRowColors="true"
 					>
+					<ui:rowSettingsTemplate>
+						<ui:RowSettings id="mainTableRowSettings" highlight="{= ${position} > 4 ? ${position} > 6 ? ${position} > 15 ? 'Error' : null : 'Information': 'Success'}" />
+					</ui:rowSettingsTemplate>
 					<ui:columns>
 						<ui:Column
 							id="position"
@@ -54,7 +58,7 @@
 							showSortMenuEntry="false">
 							<Label id="_PositionLabel" text="#" />
 							<ui:template>
-								<Text id="position_text" text="{position}" wrapping="false" />
+								<Text id="position_text" text="{position}" wrapping="false"  />
 							</ui:template>
 						</ui:Column>
 						<ui:Column

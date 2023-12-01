@@ -1,7 +1,6 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/table/library",
-    "sap/ui/model/Sorter",
     "sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
     "projectclub/controller/BaseController"
@@ -9,7 +8,7 @@ sap.ui.define([
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller, library, Sorter, Filter, FilterOperator, BaseController) {
+    function (Controller, library, Filter, FilterOperator, BaseController) {
         "use strict";
         var SortOrder = library.SortOrder;
 
@@ -49,6 +48,8 @@ sap.ui.define([
                 this.byId("table").bindRows({path:`/Ligi(ID=${oLiga.ID})/clubs`});
                 this.clearAllSortings();
                 this.getView().byId("title").setTitle(oLiga.name);
+                this.byId("mainTableRowSettings").setHighlight()
+                console.log(this.byId("mainTableRowSettings").getHighlight())
             },
 
             clearAllSortings: function() {
@@ -109,7 +110,6 @@ sap.ui.define([
                     
                     oTable.sort(oColumnName, sSortProperty, false);
                     oTable.sort(oPositionColumn, SortOrder.Ascending, true);
-                    console.log(this.byId("name").getProperty("sortOrder"));
                 }
             },
         });

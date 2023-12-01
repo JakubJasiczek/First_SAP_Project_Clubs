@@ -3,6 +3,7 @@
 	controllerName="projectclub.controller.ClubPage"
 	xmlns="sap.m"
     xmlns:viz="sap.viz.ui5.controls"
+    xmlns:f="sap.ui.layout.form"
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
     xmlns:chart="sap.suite.ui.commons"
@@ -74,9 +75,9 @@
                                         <SegmentedButtonItem id="stats25QueensButton" text="25 Ostatnich" />
                                     </items>
                                 </SegmentedButton>
-                                <HBox id="statisticHBox" >
+                                <HBox id="vizframHBox" >
                                     <VBox id="matchVBox" width="50%">
-                                        <chart:ChartContainer id="matchChartContainer" showFullScreen="true" showZoom="false">
+                                        <chart:ChartContainer id="matchChartContainer" showFullScreen="false" showZoom="false" showLegendButton="false" showLegend="true">
                                             <chart:ChartContainerContent id="matchChartContainerContent">
                                                 <chart:content>
                                                     <viz:VizFrame 
@@ -86,29 +87,25 @@
                                                         uiConfig="{applicationSet:'fiori'}"
                                                         vizProperties="{
                                                             plotArea:{dataLabel:{visible: true,type:'value'},
-                                                                      drawingEffect: 'glossy',
-                                                                      colorPalette: ['#03772E','#FF8000','#FF0000']},
+                                                                    drawingEffect: 'glossy',
+                                                                    colorPalette: ['#03772E','#FF8000','#FF0000']},
                                                             title : {text:'Bilans Meczowy'}}"
                                                         selectData="myOnClickHandler" 
                                                         renderComplete="handleRenderComplete">
                                                         <viz:dataset>
-                                                            <viz.data:FlattenedDataset id="flattenMatchData" data="{/Clubs}">
-                                                                <viz.data:dimensions>
-                                                                <viz.data:DimensionDefinition id="matchDimensionDefinition" name="Flavor" value="{name}" />
-                                                                </viz.data:dimensions>
+                                                            <viz.data:FlattenedDataset id="flattenMatchData" data="{clubStats>/ClubStats}">
                                                             <viz.data:measures>
-                                                                    <viz.data:MeasureDefinition id="winMatchMeasureDefinition" name="wins" value="{win}" />
-                                                                    <viz.data:MeasureDefinition id="drawMatchMeasureDefinition" name="draws" value="{draw}" />
-                                                                    <viz.data:MeasureDefinition id="loseMatchMeasureDefinition" name="loses" value="{lose}" />
+                                                                    <viz.data:MeasureDefinition id="winMatchMeasureDefinition" name="Wins" value="{clubStats>win}" />
+                                                                    <viz.data:MeasureDefinition id="drawMatchMeasureDefinition" name="Draws" value="{clubStats>draw}" />
+                                                                    <viz.data:MeasureDefinition id="loseMatchMeasureDefinition" name="Loses" value="{clubStats>lose}" />
                                                             </viz.data:measures>
                                                             </viz.data:FlattenedDataset>
                                                         </viz:dataset>
                                                             
                                                         <viz:feeds>
-                                                            <viz.feeds:FeedItem id="measureMatchItem1" uid="size" type="Measure" values="wins" />
-                                                            <viz.feeds:FeedItem id="measureMatchItem2" uid="size" type="Measure" values="draws" />
-                                                            <viz.feeds:FeedItem id="measureMatchItem3" uid="size" type="Measure" values="loses" />
-                                                            <viz.feeds:FeedItem id="dimensionMatchItem1" uid="color" type="Dimension" values="Flavor" />
+                                                            <viz.feeds:FeedItem id="measureMatchItem1" uid="size" type="Measure" values="Wins" />
+                                                            <viz.feeds:FeedItem id="measureMatchItem2" uid="size" type="Measure" values="Draws" />
+                                                            <viz.feeds:FeedItem id="measureMatchItem3" uid="size" type="Measure" values="Loses" />
                                                         </viz:feeds>
                                                     </viz:VizFrame>
                                                 </chart:content>
@@ -116,7 +113,7 @@
                                         </chart:ChartContainer>
                                     </VBox>
                                     <VBox id="golsVBox" width="50%">
-                                        <chart:ChartContainer id="golsChartContainer" showFullScreen="true" showZoom="false">
+                                        <chart:ChartContainer id="golsChartContainer" showFullScreen="false" showZoom="false" showLegendButton="false" showLegend="true">
                                             <chart:ChartContainerContent id="golsChartContainerContent">
                                                 <chart:content>
                                                     <viz:VizFrame 
@@ -133,21 +130,17 @@
                                                         selectData="myOnClickHandler" 
                                                         renderComplete="handleRenderComplete">
                                                         <viz:dataset>
-                                                            <viz.data:FlattenedDataset id="flattenGolsData" data="{/Clubs}">
-                                                                <viz.data:dimensions>
-                                                                <viz.data:DimensionDefinition id="golsDimensionDefinition" name="Flavor" value="{name}" />
-                                                                </viz.data:dimensions>
+                                                            <viz.data:FlattenedDataset id="flattenGolsData" data="{clubStats>/ClubStats}">
                                                             <viz.data:measures>
-                                                                    <viz.data:MeasureDefinition id="golsMeasureDefinition" name="golsScore" value="{gols_score}" />
-                                                                    <viz.data:MeasureDefinition id="loseMeasureDefinition" name="golsLose" value="{gols_lose}" />
+                                                                    <viz.data:MeasureDefinition id="golsMeasureDefinition" name="Gols Scores" value="{clubStats>gols_score}" />
+                                                                    <viz.data:MeasureDefinition id="loseMeasureDefinition" name="Gols Lose" value="{clubStats>gols_lose}" />
                                                             </viz.data:measures>
                                                             </viz.data:FlattenedDataset>
                                                         </viz:dataset>
                                                             
                                                         <viz:feeds>
-                                                            <viz.feeds:FeedItem id="measureGolsItem1" uid="size" type="Measure" values="golsScore" />
-                                                            <viz.feeds:FeedItem id="measureGolsItem2" uid="size" type="Measure" values="golsLose" />
-                                                            <viz.feeds:FeedItem id="dimensionGolsItem1" uid="color" type="Dimension" values="Flavor" />
+                                                            <viz.feeds:FeedItem id="measureGolsItem1" uid="size" type="Measure" values="Gols Scores" />
+                                                            <viz.feeds:FeedItem id="measureGolsItem2" uid="size" type="Measure" values="Gols Lose" />
                                                         </viz:feeds>
                                                     </viz:VizFrame>
                                                 </chart:content>
@@ -155,44 +148,322 @@
                                         </chart:ChartContainer>
                                     </VBox>
                                 </HBox>
+                                <HBox id="matchAndGolsStatsHBox" >
+                                    <VBox id="vboxGolsStats" width="100%" height="100%">
+                                        <f:SimpleForm id="matchStatsSimpleForm"
+                                            layout="ResponsiveGridLayout"
+                                            labelSpanXL="6"
+                                            labelSpanL="6"
+                                            labelSpanM="6"
+                                            labelSpanS="6"
+                                            columnsXL="2"
+                                            columnsL="2"
+                                            columnsM="2">
+                                            <f:content>
+                                                <core:Title id="matchStatsTitle" text="Statystyki meczów" />
+                                                <Label id="allProStatsLabel" text="Mecze" />
+                                                <Text id="allProStatsText" text="{clubStats>/ClubStats/0/match}"/>
+                                                <Label id="winProStatsLabel" text="% wygranych" />
+                                                <Text id="winProStatsText" text="{clubStats>/ClubStats/1/winsPerMatch}%"/>
+                                                <Label id="loseProStatsLabel" text="% przegranych" />
+                                                <Text id="loseProStatsText" text="{clubStats>/ClubStats/1/losePerMatch}%"/>
+                                                <Label id="drawProStatsLabel" text="% zremisowanych" />
+                                                <Text id="drawProStatsText" text="{clubStats>/ClubStats/1/drawPerMatch}%"/>
+                                                <Label id="pointsProStatsLabel" text="Punkty/Mecz" />
+                                                <Text id="pointsProStatsText" text="{clubStats>/ClubStats/1/pointsPerMatch}"/>
+                                                
+                                                <core:Title id="golsStatsTitle" text="Statystyki bramek" />
+                                                <Label id="golsProStatsLabel" text="Gole/Mecz" />
+                                                <Text id="golsProStatsText" text="{clubStats>/ClubStats/1/golsPerMatch}"/>
+                                                <Label id="golsScoreProStatsLabel" text="Gole strzelone/Mecz" />
+                                                <Text id="golsScoreProStatsText" text="{clubStats>/ClubStats/1/golsScorePerMatch}"/>
+                                                <Label id="golsLoseProStatsLabel" text="Gole stracone/Mecz" />
+                                                <Text id="golsLoseProStatsText" text="{clubStats>/ClubStats/1/golsLosePerMatch}"/>
+                                                
+                                            </f:content>
+                                        </f:SimpleForm>
+                                    </VBox>
+                                </HBox>
+                                 <HBox id="vizframHBox1" >
+                                    <VBox id="matchVBox1" width="50%">
+                                        <chart:ChartContainer id="matchChartContainer1" showFullScreen="false" showZoom="false" showLegendButton="false" showLegend="true">
+                                            <chart:ChartContainerContent id="matchChartContainerContent1">
+                                                <chart:content>
+                                                    <viz:VizFrame 
+                                                        id="idMatchVizFrame1" 
+                                                        width="auto"
+                                                        vizType="pie"
+                                                        uiConfig="{applicationSet:'fiori'}"
+                                                        vizProperties="{
+                                                            plotArea:{dataLabel:{visible: true,type:'value'},
+                                                                    drawingEffect: 'glossy',
+                                                                    colorPalette: ['#03772E','#FF8000','#FF0000']},
+                                                            title : {text:'Bilans Meczowy'}}"
+                                                        selectData="myOnClickHandler" 
+                                                        renderComplete="handleRenderComplete">
+                                                        <viz:dataset>
+                                                            <viz.data:FlattenedDataset id="flattenMatchData1" data="{clubStats>/ClubStats}">
+                                                            <viz.data:measures>
+                                                                    <viz.data:MeasureDefinition id="winMatchMeasureDefinition1" name="Wins" value="{clubStats>win}" />
+                                                                    <viz.data:MeasureDefinition id="drawMatchMeasureDefinition1" name="Draws" value="{clubStats>draw}" />
+                                                                    <viz.data:MeasureDefinition id="loseMatchMeasureDefinition1" name="Loses" value="{clubStats>lose}" />
+                                                            </viz.data:measures>
+                                                            </viz.data:FlattenedDataset>
+                                                        </viz:dataset>
+                                                            
+                                                        <viz:feeds>
+                                                            <viz.feeds:FeedItem id="measureMatchItem11" uid="size" type="Measure" values="Wins" />
+                                                            <viz.feeds:FeedItem id="measureMatchItem21" uid="size" type="Measure" values="Draws" />
+                                                            <viz.feeds:FeedItem id="measureMatchItem31" uid="size" type="Measure" values="Loses" />
+                                                        </viz:feeds>
+                                                    </viz:VizFrame>
+                                                </chart:content>
+                                            </chart:ChartContainerContent>
+                                        </chart:ChartContainer>
+                                    </VBox>
+                                    <VBox id="golsVBox1" width="50%">
+                                        <chart:ChartContainer id="golsChartContainer1" showFullScreen="false" showZoom="false" showLegendButton="false" showLegend="true">
+                                            <chart:ChartContainerContent id="golsChartContainerContent1">
+                                                <chart:content>
+                                                    <viz:VizFrame 
+                                                        id="idGolsVizFrame1" 
+                                                        width="auto"
+                                                        vizType="pie"
+                                                        uiConfig="{applicationSet:'fiori'}"
+                                                        vizProperties="{
+                                                            plotArea:{dataLabel:{visible: true,
+                                                                                type:'value'},
+                                                                                drawingEffect: 'glossy',
+                                                                                colorPalette: ['#03772E','#FF0000']},
+                                                            title : {text:'Bilans Bramkowy'}}"
+                                                        selectData="myOnClickHandler" 
+                                                        renderComplete="handleRenderComplete">
+                                                        <viz:dataset>
+                                                            <viz.data:FlattenedDataset id="flattenGolsData1" data="{clubStats>/ClubStats}">
+                                                            <viz.data:measures>
+                                                                    <viz.data:MeasureDefinition id="golsMeasureDefinition1" name="Gols Scores" value="{clubStats>gols_score}" />
+                                                                    <viz.data:MeasureDefinition id="loseMeasureDefinition1" name="Gols Lose" value="{clubStats>gols_lose}" />
+                                                            </viz.data:measures>
+                                                            </viz.data:FlattenedDataset>
+                                                        </viz:dataset>
+                                                            
+                                                        <viz:feeds>
+                                                            <viz.feeds:FeedItem id="measureGolsItem11" uid="size" type="Measure" values="Gols Scores" />
+                                                            <viz.feeds:FeedItem id="measureGolsItem21" uid="size" type="Measure" values="Gols Lose" />
+                                                        </viz:feeds>
+                                                    </viz:VizFrame>
+                                                </chart:content>
+                                            </chart:ChartContainerContent>
+                                        </chart:ChartContainer>
+                                    </VBox>
+                                </HBox>
+                                <HBox id="matchAndGolsStatsHBox1" >
+                                    <VBox id="vboxGolsStats1" width="100%" height="100%">
+                                        <f:SimpleForm id="matchStatsSimpleForm1"
+                                            layout="ResponsiveGridLayout"
+                                            labelSpanXL="6"
+                                            labelSpanL="6"
+                                            labelSpanM="6"
+                                            labelSpanS="6"
+                                            columnsXL="2"
+                                            columnsL="2"
+                                            columnsM="2">
+                                            <f:content>
+                                                <core:Title id="matchStatsTitle1" text="" />
+                                                <Label id="allProStatsLabel1" text="Mecze:" />
+                                                <Text id="allProStatsText1" text="10"/>
+                                                <Label id="winProStatsLabel1" text="% wygranych:" />
+                                                <Text id="winProStatsText1" text="50 %"/>
+                                                <Label id="loseProStatsLabel1" text="% przegranych:" />
+                                                <Text id="loseProStatsText1" text="50 %"/>
+                                                <Label id="drawProStatsLabel1" text="% zremisowanych:" />
+                                                <Text id="drawProStatsText1" text="50 %"/>
+                                                <Label id="pointsProStatsLabel1" text="Punkty/Mecz:" />
+                                                <Text id="pointsProStatsText1" text="2"/>
+                                                
+                                                <core:Title id="golsStatsTitle1" text="Statystyki bramek" />
+                                                <Label id="golsProStatsLabel1" text="Gole/Mecz:" />
+                                                <Text id="golsProStatsText1" text="2"/>
+                                                <Label id="golsScoreProStatsLabel1" text="Gole strzelone/Mecz:" />
+                                                <Text id="golsScoreProStatsText1" text="2"/>
+                                                <Label id="golsLoseProStatsLabel1" text="Gole stracone/Mecz:" />
+                                                <Text id="golsLoseProStatsText1" text="2"/>
+                                                
+                                            </f:content>
+                                        </f:SimpleForm>
+                                    </VBox>
+                                </HBox>
+                                <VBox id="footerVbox" >
+                                    <Text id="helpText1" text=""></Text>
+                                    <Text id="helpText2" text="Ustawienia Prywatności"></Text>
+                                    <Text id="helpText3" text="Ustawienia Prywatności"></Text>
+                                    <Text id="helpText4" text="Ustawienia Prywatności"></Text>
+                                </VBox>
                             </IconTabFilter>
                             <IconTabFilter id="tableTabFilter" text="Tabela">
-                                <Page
-                                id="clubPageTablePage"
-                                showHeader="false"
-                                backgroundDesign= "Solid"
-                                enableScrolling="true">
-                                    <content>
-                                        <ui:Table 
-                                            id="clubPageTable"
-                                            rows="{path:'/Clubs'}"
-                                            selectionMode="MultiToggle">
-                                            <ui:extension>
-                                                <OverflowToolbar id="ss" style="Clear">
-                                                    <Title id="title" text="Products"/>
-                                                </OverflowToolbar>
-                                            </ui:extension>
-                                            <ui:columns>
-                                                <ui:Column id="clubPageTablePositionColumn">
-                                                    <Label id="positionLabel" text="Product Name" />
-                                                    <ui:template>
-                                                        <Text id="positionText" text="{position}" wrapping="false" />
-                                                    </ui:template>
-                                                </ui:Column>
-                                                <ui:Column id="clubPageTableNameColumn">
-                                                    <Label id="nameLabel" text="Product Name" />
-                                                    <ui:template>
-                                                        <Text id="nameText" text="{name}" wrapping="false" />
-                                                    </ui:template>
-                                                </ui:Column>
-                                            </ui:columns>
-                                        
-                                        </ui:Table>
-                                    </content>
-                                </Page>
+                                <ui:Table 
+                                    id="clubPageTable"
+                                    rows="{path:'/Clubs'}"
+                                    selectionMode="None"
+                                    columnSelect="sortTable">
+                                    <ui:columns>
+                                        <ui:Column 
+                                            id="clubPageTablePositionColumn"
+                                            resizable="false"
+                                            width="3rem"
+							                sortProperty="position"
+                                            showSortMenuEntry="false">
+                                            <Label id="positionLabel" text="#" />
+                                            <ui:template>
+                                                <Text id="positionText" text="{position}" wrapping="false" />
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column 
+                                            id="name"
+                                            width="11rem"
+                                            sortProperty="name"
+                                            sortOrder="Ascending"
+                                            resizable="false"
+                                            showSortMenuEntry="false">
+                                            <Label id="nameLabel" text="Product Name" />
+                                            <ui:template>
+                                                <Text id="nameText" text="{name}" wrapping="false" />
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column
+                                            id="points"
+                                            width="3rem"
+                                            sortProperty="points"
+                                            resizable="false"
+                                            showSortMenuEntry="false">
+                                            <Label id="_PointsLabel" text="P" />
+                                            <ui:template>
+                                                <Text id = "points_text" text="{points}" wrapping="false" />
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column 
+                                            id="match"
+                                            width="3rem"
+                                            sortProperty="match"
+                                            resizable="false"
+                                            showSortMenuEntry="false">
+                                            <Label id="_MatchLabel" text="M" />
+                                            <ui:template>
+                                                <Text id = "match_text" text="{match}" wrapping="false" />
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column 
+                                            id = "win"
+                                            width="3rem"
+                                            sortProperty="win"
+                                            resizable="false"
+                                            showSortMenuEntry="false">
+                                            <Label id="_WinLabel" text="W" />
+                                            <ui:template>
+                                                <Text id = "win_text" text="{win}" wrapping="false" />
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column 
+                                            id = "draw"
+                                            width="3rem"
+                                            sortProperty="draw"
+                                            resizable="false"
+                                            showSortMenuEntry="false">
+                                            <Label id="_DrawLabel" text="D" />
+                                            <ui:template>
+                                                <Text id = "draw_text" text="{draw}" wrapping="false" />
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column 
+                                            id = "lose"
+                                            width="3rem"
+                                            sortProperty="lose"
+                                            resizable="false"
+                                            showSortMenuEntry="false">
+                                            <Label id="_LoseLabel" text="L" />
+                                            <ui:template>
+                                                <Text id = "false_text" text="{lose}" wrapping="false" />
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column 
+                                            id = "gols"
+                                            width="4.5rem"
+                                            sortProperty="gols_lose"
+                                            resizable="false"
+                                            showSortMenuEntry="false">
+                                            <Label id="_GolsScoreAndLoseLabel" text="+/-" />
+                                            <ui:template>
+                                                <Text id = "gols_text" text="{gols_score}:{gols_lose}" wrapping="false" />
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column
+                                            id = "balans" 
+                                            width="4.5rem"
+                                            sortProperty="gols_score"
+                                            resizable="false"
+                                            showSortMenuEntry="false">
+                                            <Label id="_BalansLabel" text="B" />
+                                            <ui:template>
+                                                <Text id = "balans_text" text="{gols_score}-{gols_lose}" wrapping="false" />
+                                            </ui:template>
+                                        </ui:Column>
+                                    </ui:columns>
+                                </ui:Table>
                             </IconTabFilter> 
-                            <IconTabFilter id="resultsTabFilter" text="Wyniki"></IconTabFilter>
-                            <IconTabFilter id="matchesTabFilter" text="Mecze"></IconTabFilter>
+                            <IconTabFilter id="resultsTabFilter" text="Wyniki">
+                                <ui:Table 
+                                    id="resultMatchesTable"
+                                    rows="{
+                                        path: 'allMatches>/machtes'
+                                    }"
+                                    width="100%"
+                                    selectionMode="None"
+                                    >
+                                    
+                                    <ui:columns>
+                                        <ui:Column id="resultMatchesDataColumn" width="200px" resizable="false">
+                                            <Label id="resultMatchesDataColumnLabel" text="Data"/>
+                                            <ui:template>
+                                                <Text id="resultMatchesDataColumnText" text="{allMatches>dateEventString}" />
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column id="resultMatchesNameColumn" >
+                                            <Label id="resultMatchesNameColumnLabel" text="Mecz"/>
+                                            <ui:template>
+                                                <Text id="resultMatchesNameColumnText" text="{allMatches>homeName}  {allMatches>homeGols}:{allMatches>awayGols}   {allMatches>awayName}"/>
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column id="resultMatchesDataColumnUnvisible" visible="false" sortProperty="dateEvent" />
+                                    </ui:columns>
+                                </ui:Table>
+                            </IconTabFilter>
+                            <IconTabFilter id="matchesTabFilter" text="Mecze">
+                                <ui:Table 
+                                    id="noResultMatchesTable"
+                                    rows="{
+                                        path: 'allMatches>/machtes'
+                                    }"
+                                    width="100%"
+                                    selectionMode="None"
+                                    >
+                                    
+                                    <ui:columns>
+                                        <ui:Column id="noResultMatchesDataColumn" width="200px" resizable="false">
+                                            <Label id="noResultMatchesDataColumnLabel" text="Data"/>
+                                            <ui:template>
+                                                <Text id="noResultMatchesDataColumnText" text="{allMatches>dateEventString}" />
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column id="noResultMatchesNameColumn" >
+                                            <Label id="noResultMatchesNameColumnLabel" text="Mecz"/>
+                                            <ui:template>
+                                                <Text id="noResultMatchesNameColumnText" text="{allMatches>homeName}  {allMatches>homeGols}:{allMatches>awayGols}   {allMatches>awayName}"/>
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column id="noResultMatchesDataColumnUnvisible" visible="false" sortProperty="dateEvent" />
+                                    </ui:columns>
+                                </ui:Table>
+                            </IconTabFilter>
                             <IconTabFilter id="squadTabFilter" text="Skład"></IconTabFilter>
                         </items>
                     </IconTabBar>
