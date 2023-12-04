@@ -46,20 +46,20 @@ sap.ui.define([
 						MessageToast.show("Server Send Error");
 					}
 				});
-				
+			console.log(this.byId("resultMatchesTable"))	
 		},
 
 		_normalSettings:function(data){
 			var oModel = new JSONModel();
 			let oModelMatches = new JSONModel();
 			var aRestData = {
-				winsPerMatch : data.win/data.match*100,
-				losePerMatch : data.lose/data.match*100,
-				drawPerMatch : data.draw/data.match*100,
-				pointsPerMatch : data.points/data.match,
-				golsPerMatch : (data.gols_lose+data.gols_score)/data.match,
-				golsScorePerMatch : data.gols_score/data.match,
-				golsLosePerMatch : data.gols_lose/data.match,
+				winsPerMatch : Math.ceil(data.win/data.match*10000)/100,
+				losePerMatch : Math.ceil(data.lose/data.match*10000)/100,
+				drawPerMatch : Math.ceil(data.draw/data.match*10000)/100,
+				pointsPerMatch : Math.ceil(data.points/data.match*100)/100,
+				golsPerMatch : Math.ceil((data.gols_lose+data.gols_score)/data.match*100)/100,
+				golsScorePerMatch : Math.ceil(data.gols_score/data.match*100)/100,
+				golsLosePerMatch : Math.ceil(data.gols_lose/data.match*100)/100,
 			};
 			let aMatches = [...data.matchesAway,...data.matchesHome]
 			oModel.setData({'ClubStats' : [data,aRestData]});
@@ -72,7 +72,6 @@ sap.ui.define([
 			this.sortByPosition();
 			this._filterMatchesByDate();
 			this._sortTables();
-			console.log(data)
 		},
 
 		_sortTables:function(){

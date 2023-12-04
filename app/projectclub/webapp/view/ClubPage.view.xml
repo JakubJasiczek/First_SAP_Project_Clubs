@@ -51,12 +51,12 @@
                     <Panel id="clubInformationPanel">
                         <HBox id="informationClubHBox">
                             <VBox id="clubPageImageVbox" width="10%">
-                                <Image id="clubImage" src="{img>/products/Jagielonia Białystok}" width="100%" />
+                                <Image id="clubImage" src="{clubStats>/ClubStats/0/logo}" width="100%" />
                             </VBox>
                             <VBox id="clubaPageInformationPause" width="1%"></VBox>
                             <VBox id="clubPageNameVbox">
                                 <Title titleStyle="H3" id="clubName" text="{name}" level="H1"/>
-                                <Text id="clubStadionName" text="Stadion: "/>
+                                <Text id="clubStadionName" text="Stadion: {clubStats>/ClubStats/0/stadium}"/>
                             </VBox>
                         </HBox>
                     </Panel>
@@ -419,7 +419,9 @@
                                     width="100%"
                                     selectionMode="None"
                                     >
-                                    
+                                    <ui:rowSettingsTemplate>
+                                        <ui:RowSettings id="clubPageResultTableRowSettings" highlight="{= ${allMatches>homeGols} !== null ? null : 'Error'}" />
+                                    </ui:rowSettingsTemplate>
                                     <ui:columns>
                                         <ui:Column id="resultMatchesDataColumn" width="200px" resizable="false">
                                             <Label id="resultMatchesDataColumnLabel" text="Data"/>
@@ -430,7 +432,31 @@
                                         <ui:Column id="resultMatchesNameColumn" >
                                             <Label id="resultMatchesNameColumnLabel" text="Mecz"/>
                                             <ui:template>
-                                                <Text id="resultMatchesNameColumnText" text="{allMatches>homeName}  {allMatches>homeGols}:{allMatches>awayGols}   {allMatches>awayName}"/>
+                                                <Text id="resultMatchesNameColumnText" text="{allMatches>homeName}-{allMatches>awayName}"/>
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column id="resultMatchesResultColumn" width="80px" >
+                                            <Label id="resultMatchesResultColumnLabel" text="Wynik"/>
+                                            <ui:template>
+                                                <Text id="resultMatchesResultColumnText" text="{allMatches>homeGols}:{allMatches>awayGols}"/>
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column id="resultMatchesRRColumn" width="50px">
+                                            <Label id="resultMatchesRRColumnLabel" text="RR"/>
+                                            <ui:template>
+                                                <Text id="resultMatchesRRColumnText" text="{allMatches>homeRR}:{allMatches>awayRR}"/>
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column id="resultMatchesYCColumn" width="50px">
+                                            <Label id="resultMatchesYCColumnLabel" text="YC"/>
+                                            <ui:template>
+                                                <Text id="resultMatchesYCColumnText" text="{allMatches>homeYC}:{allMatches>awayYC}"/>
+                                            </ui:template>
+                                        </ui:Column>
+                                        <ui:Column id="resultMatchesRCColumn" width="50px">
+                                            <Label id="resultMatchesRCColumnLabel" text="RC"/>
+                                            <ui:template>
+                                                <Text id="resultMatchesRCColumnText" text="{allMatches>homeRC}:{allMatches>awayRC}"/>
                                             </ui:template>
                                         </ui:Column>
                                         <ui:Column id="resultMatchesDataColumnUnvisible" visible="false" sortProperty="dateEvent" />

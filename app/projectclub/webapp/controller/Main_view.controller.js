@@ -48,8 +48,6 @@ sap.ui.define([
                 this.byId("table").bindRows({path:`/Ligi(ID=${oLiga.ID})/clubs`});
                 this.clearAllSortings();
                 this.getView().byId("title").setTitle(oLiga.name);
-                this.byId("mainTableRowSettings").setHighlight()
-                console.log(this.byId("mainTableRowSettings").getHighlight())
             },
 
             clearAllSortings: function() {

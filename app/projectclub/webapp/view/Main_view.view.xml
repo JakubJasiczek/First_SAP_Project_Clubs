@@ -47,7 +47,7 @@
 					alternateRowColors="true"
 					>
 					<ui:rowSettingsTemplate>
-						<ui:RowSettings id="mainTableRowSettings" highlight="{= ${position} > 4 ? ${position} > 6 ? ${position} > 15 ? 'Error' : null : 'Information': 'Success'}" />
+						<ui:RowSettings id="mainTableRowSettings" highlight="{= ${position} > 1 ? ${position} > 4 ? ${position} > 6 ? ${position} > 15 ? 'Error' : null : 'Warning' : 'Information': 'Success'}" />
 					</ui:rowSettingsTemplate>
 					<ui:columns>
 						<ui:Column
@@ -140,14 +140,15 @@
 							</ui:template>
 						</ui:Column>
 						<ui:Column
-							id = "balans" 
+							id = "balance" 
 							width="4.5rem"
 							sortProperty="gols_score"
 							resizable="false"
-							showSortMenuEntry="false">
-							<Label id="_BalansLabel" text="B" />
+							showSortMenuEntry="false"
+							>
+							<Label id="_balanceLabel" text="B" />
 							<ui:template>
-								<Text id = "balans_text" text="{gols_score}-{gols_lose}" wrapping="false" />
+								<Text id = "balance_text" text="{balance}" wrapping="false" textAlign="Center" />
 							</ui:template>
 						</ui:Column>
 					</ui:columns>
