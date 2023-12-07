@@ -173,7 +173,7 @@
 									color="#41CC03"/>
 								<Text 
 									id = "championText" 
-									text="{i18n>Chamion}"/>
+									text="{i18n>Champion}"/>
 							</HBox>
 							<HBox id="_LMGenBox" >
 								<core:Icon 

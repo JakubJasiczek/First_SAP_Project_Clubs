@@ -235,7 +235,7 @@
                                         </f:content>
                                     </f:SimpleForm>
                                     <Button id="editDialogWindowButton" press="dialogEdit" text="{i18n>Edit/Confirm}" width="50%"/>
-                                    <Button id="closeDialogWindowButton" press="dialogClose" text="{i18n>Cancle}" width="50%"/>
+                                    <Button id="closeDialogWindowButton" press="dialogClose" text="{i18n>Cancel}" width="50%"/>
                                 </Dialog>
                                 <Dialog 
                                     id="addStatsDialog" 

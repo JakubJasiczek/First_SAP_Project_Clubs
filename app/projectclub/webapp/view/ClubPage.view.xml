@@ -44,7 +44,7 @@
                         text="{name}" 
                         key="rootItem1" 
                         icon="sap-icon://employee"
-						select="sortLigi">
+						select="onNavBack1">
                     </tnt:NavigationListItem>
                 </tnt:NavigationList>
 			</Page>
@@ -52,8 +52,6 @@
         <detailPages>
             <Page 
                 id="detailClubInformationPage"
-                showNavButton="true"
-		        navButtonPress="onNavBack1"
                 title="{i18n>InformationAboutClub}">
                 <content>
                     <Panel id="clubInformationPanel">
