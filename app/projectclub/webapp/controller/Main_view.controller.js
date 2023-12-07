@@ -18,14 +18,27 @@ sap.ui.define([
             },
 
             onAfterRendering: function () {
+                this.byId("navigationList").setSelectedItem("container-projectclub---Main_view--_LigiNavigationListItem-container-projectclub---Main_view--navigationList-0")
+                this.byId("table").bindRows({path:`/Ligi(ID=66b64b3f-1520-4cd7-aebd-3c9d95910692)/clubs`});
                 this.sortByPosition();
+                
+                this.getView().byId("title").setTitle("PKO BP Ekstraklasa");
+            },
+
+            formatAvailableToObjectState: function(bAvailable) {
+                return bAvailable ? "Success" : "Error";
+            },
+
+            refresh: function(){
+                this.byId("table").getBinding("rows").refresh();
+                this.clearAllSortings();
             },
 
             onDisplayNotFound : function () {
                 // display the "notFound" target without changing the hash
-                this.getRouter().getTargets().display("notFound", {
+                /*this.getRouter().getTargets().display("notFound", {
                     fromTarget : "TargetMain_view"
-                });
+                });*/
             },
 
             openClubPage: function (oEvent) {
@@ -45,6 +58,7 @@ sap.ui.define([
 
             sortLigi: function (oEvent) {
                 let oLiga = oEvent.getSource().getBindingContext().getObject();
+                if(oLiga.ID==="7abf0c3b-1bed-4596-951c-731cbac2aeda"){this.byId("table").setVisibleRowCount(20)}else{this.byId("table").setVisibleRowCount(18)}
                 this.byId("table").bindRows({path:`/Ligi(ID=${oLiga.ID})/clubs`});
                 this.clearAllSortings();
                 this.getView().byId("title").setTitle(oLiga.name);

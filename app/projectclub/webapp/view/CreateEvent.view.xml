@@ -21,7 +21,7 @@
         <masterPages>
             <Page
 				id="masterClubInformationPage"
-				title="Wszystkie Ligi"
+				title="{i18n>NavigationListTitle}"
 				backgroundDesign= "List">
                 <tnt:NavigationList
                     id="navigationList"
@@ -43,13 +43,13 @@
                 id="detailClubInformationPage"
                 showNavButton="true"
 		        navButtonPress="onNavBack1"
-                title="Wydarzenia">
+                title="{i18n>MatchCreationMenu}">
                 <content>
                     <IconTabBar 
                         id="eventMenuTapBar"
                         headerBackgroundDesign="Transparent">
                         <items>
-                            <IconTabFilter id="addEventTabFilter" text="Stwórz">
+                            <IconTabFilter id="addEventTabFilter" text="{i18n>Create}">
                                 <f:SimpleForm
                                     id="form"
                                     maxContainerCols="2"
@@ -60,7 +60,7 @@
 
                                     <f:content>
                                         
-                                        <Label id="dataTimeEventLabel" text="Event data" required="true"/>
+                                        <Label id="dataTimeEventLabel" text="{i18n>EventDate}" required="true"/>
                                         <DateTimePicker
                                             id="eventDataAndTimePicker"
                                             width="100%"
@@ -74,7 +74,7 @@
                                             minutesStep="5"
                                             secondsStep="60" />
 
-                                        <Label id="leagueEventLabel" text="League" required="true"/>
+                                        <Label id="leagueEventLabel" text="{i18n>League}" required="true"/>
                                         <ComboBox
                                             id="addEventLeagueSelect"
                                             items="{
@@ -85,7 +85,7 @@
                                             <core:Item id="addEventLeagueItem"  text="{name}" key="{ID}" />
                                         </ComboBox>
 
-                                        <Label id="queenEventLabel" text="Queen" required="true"/>
+                                        <Label id="queenEventLabel" text="{i18n>Round}" required="true"/>
                                         <StepInput 
                                                 id="addStepInput"
                                                 value="1"
@@ -95,14 +95,14 @@
                                                 step="1"
 						                        largerStep="5"/>
 
-                                        <Label id="homeClubEventLabel" text="Home Club" required="true"/>
+                                        <Label id="homeClubEventLabel" text="{i18n>HomeClub}" required="true"/>
                                         <ComboBox
                                             id="homeClubSelect"
                                             editable="false">
                                             <core:Item id="homeClubItem" text="{name}" key="{ID}"/>
                                         </ComboBox>
 
-                                        <Label id="awayClubEventLabel" text="Away Club" required="true"/>
+                                        <Label id="awayClubEventLabel" text="{i18n>AwayClub}" required="true"/>
                                         <ComboBox
                                             id="awayClubSelect"
                                             editable="false">
@@ -110,23 +110,23 @@
                                         </ComboBox>
 
                                         <Label id="buttonsEventLabel"/>
-                                        <Button id="addEventButton" text="Stwórz Wydarzenie" press="onClickAddButton" width="90%"/>
-                                        <Button id="resetSelectsButton" text="Wyczyść" icon="sap-icon://decline" press="test" width="90%"/>
+                                        <Button id="addEventButton" text="{i18n>CreateMatch}" press="onClickAddButton" width="90%"/>
+                                        <Button id="resetSelectsButton" text="{i18n>DeleteData}" icon="sap-icon://decline" press="test" width="90%"/>
                                         
                                     </f:content>
                                 </f:SimpleForm>
                             </IconTabFilter>
                                 
-                            <IconTabFilter id="tableTabFilter" text="Edytuj/Usuń">
+                            <IconTabFilter id="tableTabFilter" text="{i18n>Edit/Delete}">
                                 <OverflowToolbar id="oftEditEvent">
                                     <Button id="refreshMatchTableButton" icon="sap-icon://refresh" press="refresh" />
-                                    <Button id="editEventButton" text="Edytuj" type="Transparent" press="onEventButton"/>
-                                    <Button id="deleteEventButton" text="Usuń" type="Transparent" press="onEventButton"/>
-                                    <Button id="addEventStatsButtton" text="Dodaj/Edytuj Statystyki" press="onEventButton"/>
+                                    <Button id="editEventButton" text="{i18n>Edit}" type="Transparent" press="onEventButton"/>
+                                    <Button id="deleteEventButton" text="{i18n>Delete}" type="Transparent" press="onEventButton"/>
+                                    <Button id="addEventStatsButtton" text="{i18n>AddStatistics}" press="onEventButton"/>
                                     
                                     <SearchField 
                                         id = "eventSearch"
-                                        placeholder="Szukaj"
+                                        placeholder="{i18n>Search}"
                                         value="{ui>/globalFilter}"
                                         search="filterGlobally"
                                         width="15rem"/>
@@ -142,17 +142,25 @@
                                     }"
                                     width="100%"
                                     selectionMode="Single"
-                                    >
-                                    
+                                    visibleRowCount="20">
+                                    <tab:rowSettingsTemplate>
+                                        <tab:RowSettings id="clubPageResultTableRowSettings" highlight="{= ${homeGols} !== null ? null : 'Error'}" />
+                                    </tab:rowSettingsTemplate>
                                     <tab:columns>
                                         <tab:Column id="eventDataColumn" width="20%" sortProperty="dateEvent" resizable="false" sorted="true" sortOrder="Descending">
-                                            <Label id="eventDataColumnLabel" text="Data"/>
+                                            <Label id="eventDataColumnLabel" text="{i18n>DateOfMatch}"/>
                                             <tab:template>
                                                 <Text id="eventDataColumnText" text="{dateEventString}" />
                                             </tab:template>
                                         </tab:Column>
+                                        <tab:Column id="eventRoundColumn" width="10%">
+                                            <Label id="eventRoundColumnLabel" text="{i18n>Round}" />
+                                            <tab:template>
+                                                <Text id="eventRoundColumnText" text="{round}" textAlign="Center"/>
+                                            </tab:template>
+                                        </tab:Column>
                                         <tab:Column id="eventNameColumn" >
-                                            <Label id="eventNameColumnLabel" text="Mecz"/>
+                                            <Label id="eventNameColumnLabel" text="{i18n>Match}"/>
                                             <tab:template>
                                                 <Text id="eventNameColumnText" text="{homeName}  {homeGols}:{awayGols}   {awayName}"/>
                                             </tab:template>
@@ -161,7 +169,7 @@
                                 </tab:Table>
                                 <Dialog 
                                     id="editDialog" 
-                                    title="Edytuj Mecz" 
+                                    title="{i18n>EditMatch}" 
                                     titleAlignment="Center">
                                     <f:SimpleForm 
                                         id="simpleFromDialog"
@@ -172,7 +180,7 @@
                                         columnsL="2" columnsM="2"
                                         >
                                         <f:content>
-                                            <Label id="dataTimeEventLabelEdit" text="Event data" required="true"/>
+                                            <Label id="dataTimeEventLabelEdit" text="{i18n>EventDate}" required="true"/>
                                             <DateTimePicker
                                             id="eventDataAndTimePickerEdit"
                                             width="100%"
@@ -185,7 +193,7 @@
                                             }"
                                             minutesStep="5"
                                             secondsStep="60" />
-                                            <Label id="editLeagueEventLabel" text="League" required="true"/>
+                                            <Label id="editLeagueEventLabel" text="{i18n>League}" required="true"/>
                                             <ComboBox
                                                 id="editEventLeagueSelect"
                                                 items="{
@@ -196,7 +204,7 @@
                                                 <core:Item id="editEventLeagueItem"  text="{name}" key="{ID}" />
                                             </ComboBox>
 
-                                            <Label id="editQueenEventLabel" text="Queen" required="true"/>
+                                            <Label id="editQueenEventLabel" text="{i18n>Round}" required="true"/>
                                             <StepInput 
                                                 id="editStepInput"
                                                 value="1"
@@ -204,7 +212,7 @@
                                                 max="38"
                                                 textAlign="Center" />
 
-                                            <Label id="editHomeClubEventLabel" text="Home Club" required="true"/>
+                                            <Label id="editHomeClubEventLabel" text="{i18n>HomeClub}" required="true"/>
                                             <ComboBox 
                                                 id="editHomeClubSelect"
                                                 items="{
@@ -215,7 +223,7 @@
                                                 <core:Item id="editHomeClubItem" text="{name}" key="{ID}"/>
                                             </ComboBox>
 
-                                            <Label id="editAwayClubEventLabel" text="Away Club" required="true"/>
+                                            <Label id="editAwayClubEventLabel" text="{i18n>AwayClub}" required="true"/>
                                             <ComboBox
                                                 id="editAwayClubSelect"
                                                 items="{
@@ -226,12 +234,12 @@
                                             </ComboBox>
                                         </f:content>
                                     </f:SimpleForm>
-                                    <Button id="editDialogWindowButton" press="dialogEdit" text="Edit/Confirm" width="50%"/>
-                                    <Button id="closeDialogWindowButton" press="dialogClose" text="Cancel" width="50%"/>
+                                    <Button id="editDialogWindowButton" press="dialogEdit" text="{i18n>Edit/Confirm}" width="50%"/>
+                                    <Button id="closeDialogWindowButton" press="dialogClose" text="{i18n>Cancle}" width="50%"/>
                                 </Dialog>
                                 <Dialog 
                                     id="addStatsDialog" 
-                                    title="Dodaj Statystyki Meczu" 
+                                    title="{i18n>AddMatchStatistics}" 
                                     titleAlignment="Center"
                                     >
                                     <f:SimpleForm 
@@ -246,7 +254,7 @@
                                         columnsM="11"
                                         singleContainerFullSize="true">
                                         <f:content>
-                                            <Label id="dataStatsLabel" text="Data"/>
+                                            <Label id="dataStatsLabel" text="{i18n>EventDate}"/>
                                             <DateTimePicker
                                             id="statsDataAndTimePicker"
                                             value= "{
@@ -262,7 +270,7 @@
                                                     <l:GridData id="_IDGenGridData12" span="XL8 L8 M8 S8" />
                                                 </layoutData>
                                             </DateTimePicker>
-                                            <Label id="roundAndLeagueStatsLabel" text="Kolejka/Liga" />
+                                            <Label id="roundAndLeagueStatsLabel" text="{i18n>Round/League}" />
                                             <StepInput 
                                                 id="statsRoundStepInput"
                                                 value="1"
@@ -287,7 +295,7 @@
                                                     <l:GridData id="_IDGenGridData13" span="XL6 L6 M6 S6" />
                                                 </layoutData>
                                             </ComboBox>
-                                            <Label id="homeNameStatsLabel" text="Kluby" />
+                                            <Label id="homeNameStatsLabel" text="{i18n>Clubs}" />
                                             <ComboBox id="statsHomeNameComboBox"  
                                                 items="{
                                                 path: '/Clubs',
@@ -312,7 +320,7 @@
                                                     <l:GridData id="_IDGenGridData11" span="XL4 L4 M4 S4" />
                                                 </layoutData>
                                             </ComboBox>
-                                            <Label id="golsStatsLabel" text="Gole"/>
+                                            <Label id="golsStatsLabel" text="{i18n>Goals}"/>
                                             <StepInput
                                                 id="homeGolsStepInput"
                                                 value="0"
@@ -333,7 +341,7 @@
                                                     <l:GridData id="_IDGenGridData10" span="XL4 L4 M4 S4" />
                                                 </layoutData>
                                             </StepInput>
-                                            <Label id="nextStatsLabel" text="Rzuty rożne"/>
+                                            <Label id="nextStatsLabel" text="{i18n>CornerKicks}"/>
                                             <StepInput 
                                                 id="homeCornersStepInput"
                                                 value="0"
@@ -354,7 +362,7 @@
                                                     <l:GridData id="_IDGenGridData7" span="XL4 L4 M4 S4" />
                                                 </layoutData>
                                             </StepInput>
-                                            <Label id="YCStatsLabel" text="Żółte kartki"/>
+                                            <Label id="YCStatsLabel" text="{i18n>YellowCards}"/>
                                             <StepInput 
                                                 id="homeYCStepInput"
                                                 value="0"
@@ -375,7 +383,7 @@
                                                     <l:GridData id="_IDGenGridData9" span="XL4 L4 M4 S4" />
                                                 </layoutData>
                                             </StepInput>
-                                            <Label id="CornersStatsLabel" text="Czerwone kartki"/>
+                                            <Label id="CornersStatsLabel" text="{i18n>RedCards}"/>
                                             <StepInput 
                                                 id="homeRCStepInput"
                                                 value="0"
@@ -398,8 +406,8 @@
                                             </StepInput>
                                         </f:content>
                                     </f:SimpleForm>
-                                    <Button id="addStatsDialogWindowButton" press="onSaveStats" text="Save Statistic" width="50%"/>
-                                    <Button id="closeStatsDialogWindowButton" press="dialogClose" text="Cancel" width="50%"/>
+                                    <Button id="addStatsDialogWindowButton" press="onSaveStats" text="{i18n>SaveStatistic}" width="50%"/>
+                                    <Button id="closeStatsDialogWindowButton" press="dialogClose" text="{i18n>Cancel}" width="50%"/>
                                 </Dialog>
                             </IconTabFilter> 
                         </items>

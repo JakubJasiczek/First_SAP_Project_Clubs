@@ -109,7 +109,7 @@ sap.ui.define([
 			let roundValue = this.byId("addStepInput").getValue();
 			
 			if(homeClubID===awayClubID){
-				MessageBox.error("Nie można stworzyć wydarzenia. Błędne wybranie danych.", {
+				MessageBox.error("Unable to create match. Incorrect data selection.", {
 					actions: [ MessageBox.Action.CLOSE],
 					emphasizedAction: MessageBox.Action.CLOSE,
 					onClose: function (sAction) {
@@ -138,7 +138,7 @@ sap.ui.define([
 					dataType: "json", 
 					contentType: "application/json",
 					success: function () {
-						MessageToast.show("Utworzono wydarzenie.");
+						MessageToast.show("Match created.");
 						that.refresh();
 					},
 					error: function () {
@@ -152,7 +152,7 @@ sap.ui.define([
 		onEventButton: function(oEvent) {
 			let rowIndex = this.byId("eventTable").getSelectedIndex();
 			if(rowIndex === -1){
-				MessageToast.show("Brak wyboru wydazrenia.");
+				MessageToast.show("No match selected.");
 				return;
 			}
 
@@ -174,7 +174,7 @@ sap.ui.define([
 				async: false,
 				success: function(data) {
 					oModel.setData(data);
-					MessageToast.show("Pobranie danych...");
+					MessageToast.show("Downloading data...");
 					if(textButton==="editEventButton"){that.editDialogOpen(oModel);}
 					else if(textButton==="addEventStatsButtton"){that.addStatsEventDialogOpen(oModel);}
 				},
@@ -186,7 +186,7 @@ sap.ui.define([
 
 		onDeleteEventButton: function(clubPath){	
 			let that = this;
-			MessageBox.warning("Czy napewno chcesz usunąć wydarzenie?", {
+			MessageBox.warning("Are you sure you want to delete the match?", {
 				actions: [MessageBox.Action.YES, MessageBox.Action.CANCEL],
 				onClose: function (sAction) {
 					if(sAction === "YES"){
@@ -195,7 +195,7 @@ sap.ui.define([
 							url: `/odata/v4/clubapp/Match/${matchID}`,
 							type: 'DELETE',
 							success: function() {
-								MessageToast.show("Wydarzenie usunięto!");
+								MessageToast.show("Match deleted!");
 								that.refresh()
 							},
 							error: function () {
@@ -212,7 +212,13 @@ sap.ui.define([
 				pattern: "yyyy-MM-ddTHH:mm:ss"
 			});
 			if(oDateFormat.format(UI5Date.getInstance())<oModel.getData().dateEvent){
-				MessageBox.error("Nie można wprowadzić statystyk wydarzenia, ponieważ wydarzenie jeszcze się nie odbyło", {
+				MessageBox.error("Match statistics cannot be entered because the event has not yet taken place.", {
+					actions: [ MessageBox.Action.CLOSE]
+				});
+				return;
+			}
+			if(oModel.getData().homeGols !== null){
+				MessageBox.error("The statistics have already been entered.", {
 					actions: [ MessageBox.Action.CLOSE]
 				});
 				return;
@@ -225,11 +231,11 @@ sap.ui.define([
 			this.byId("homeGolsStepInput").setValue(oModel.getData().homeGols);
 			this.byId("awayGolsStepInput").setValue(oModel.getData().awayGols);
 			this.byId("homeCornersStepInput").setValue(oModel.getData().homeRR);
-			this.byId("homeCornersStepInput").setValue(oModel.getData().awayRR);
+			this.byId("awayCornersStepInput").setValue(oModel.getData().awayRR);
 			this.byId("homeYCStepInput").setValue(oModel.getData().homeYC);
-			this.byId("homeYCStepInput").setValue(oModel.getData().awayYC);
+			this.byId("awayYCStepInput").setValue(oModel.getData().awayYC);
 			this.byId("homeRCStepInput").setValue(oModel.getData().homeRC);
-			this.byId("homeRCStepInput").setValue(oModel.getData().awayRC);
+			this.byId("awayRCStepInput").setValue(oModel.getData().awayRC);
 			
 			setTimeout(()=>{
 				this.selectItemName("statsHomeNameComboBox",oModel.getData().homeName);
@@ -244,46 +250,150 @@ sap.ui.define([
 			let homeGols = this.byId("homeGolsStepInput").getValue();
 			let awayGols = this.byId("awayGolsStepInput").getValue();
 			let homeRR = this.byId("homeCornersStepInput").getValue();
-			let awayRR = this.byId("homeCornersStepInput").getValue();
+			let awayRR = this.byId("awayCornersStepInput").getValue();
 			let homeYC = this.byId("homeYCStepInput").getValue();
-			let awayYC = this.byId("homeYCStepInput").getValue();
+			let awayYC = this.byId("awayYCStepInput").getValue();
 			let homeRC = this.byId("homeRCStepInput").getValue();
-			let awayRC = this.byId("homeRCStepInput").getValue();
+			let awayRC = this.byId("awayRCStepInput").getValue();
 			
 			if(homeGols !== oModel.getData().homeGols || awayGols !== oModel.getData().awayGols || 
 			homeRR !== oModel.getData().homeRR || awayRR !== oModel.getData().awayRR || 
 			homeYC !== oModel.getData().homeYC || awayYC !== oModel.getData().awayYC || 
 			homeRC !== oModel.getData().homeRC || awayRC !== oModel.getData().awayRC){
-				oModel.getData().homeGols = homeGols;
-				oModel.getData().awayGols = awayGols;
-				oModel.getData().homeRR = homeRR;
-				oModel.getData().awayRR = awayRR;
-				oModel.getData().homeYC = homeYC;
-				oModel.getData().awayYC = awayYC;
-				oModel.getData().homeRC = homeRC;
-				oModel.getData().awayRC = awayRC;
-				
-				$.ajax({
-					url: `/odata/v4/clubapp/Match(${oModel.getData().ID})`,
-					type: "PUT",
-					processData: false,
-					dataType: "json", 
-					contentType: "application/json",
-					data: JSON.stringify(oModel.getData()),
-					success: function () {
-						MessageToast.show("Dodano Statystyki.");
-						that.refresh();
-						that.byId("addStatsDialog").close();
-					},
-					error: function () {
-						MessageToast.show("Server Send Error");
+				MessageBox.warning("Are you sure you want to add these statistics? You won't be able to correct them later!", {
+					actions: [MessageBox.Action.YES, MessageBox.Action.CANCEL],
+					onClose: function (sAction) {
+						if(sAction === "YES"){
+							oModel.getData().homeGols = homeGols;
+							oModel.getData().awayGols = awayGols;
+							oModel.getData().homeRR = homeRR;
+							oModel.getData().awayRR = awayRR;
+							oModel.getData().homeYC = homeYC;
+							oModel.getData().awayYC = awayYC;
+							oModel.getData().homeRC = homeRC;
+							oModel.getData().awayRC = awayRC;
+							
+							$.ajax({
+								url: `/odata/v4/clubapp/Match(${oModel.getData().ID})`,
+								type: "PUT",
+								processData: false,
+								dataType: "json", 
+								contentType: "application/json",
+								data: JSON.stringify(oModel.getData()),
+								success: function () {
+									
+									MessageToast.show("Statistics added.");
+									that.refresh();
+									that.byId("addStatsDialog").close();
+									that.refreshClubTable(oModel.getData())
+								},
+								error: function () {
+									MessageToast.show("Server Send Error");
+								}
+							});
+						} else {return;}
 					}
 				});
+				
 			} else {
-				MessageBox.error("Zmień statystki.", {
+				MessageBox.error("Change stats.", {
 					actions: [ MessageBox.Action.CLOSE]
 				});
 			}
+		},
+
+		refreshClubTable:function(matchModel){
+			let oLeagueTableClubModel = new JSONModel();
+			let IDLigi = matchModel.league_id_ID;
+			$.ajax({
+				type: "GET",
+				contentType: "application/json",
+				url: `/odata/v4/clubapp/Ligi/${IDLigi}/clubs`,
+				dataType: "json",
+				async: false,
+				success: function(data) {
+					oLeagueTableClubModel.setData(data);
+				},
+				error: function () {
+					MessageToast.show("Server Send Error");
+				}
+			});
+			let position1;
+			let position2;
+			
+			let aLeagueClubs = oLeagueTableClubModel.getData().value
+			for(let i = 0; i<aLeagueClubs.length;i++){
+				if(aLeagueClubs[i].ID === matchModel.home_ID){
+					aLeagueClubs[i].match += 1;
+					aLeagueClubs[i].gols_score += matchModel.homeGols;
+					aLeagueClubs[i].gols_lose += matchModel.awayGols;
+					aLeagueClubs[i].balance = aLeagueClubs[i].balance + matchModel.homeGols - matchModel.awayGols;
+
+					if(matchModel.homeGols>matchModel.awayGols){aLeagueClubs[i].win += 1;aLeagueClubs[i].points += 3;}else 
+					if(matchModel.homeGols===matchModel.awayGols){aLeagueClubs[i].draw += 1;aLeagueClubs[i].points += 1;}else 
+					if(matchModel.homeGols<matchModel.awayGols){aLeagueClubs[i].lose += 1;}
+					position1 = i;
+				} else if(aLeagueClubs[i].ID === matchModel.away_ID){
+					aLeagueClubs[i].match += 1;
+					aLeagueClubs[i].gols_score += matchModel.awayGols;
+					aLeagueClubs[i].gols_lose += matchModel.homeGols;
+					aLeagueClubs[i].balance = aLeagueClubs[i].balance + matchModel.awayGols - matchModel.homeGols;
+
+					if(matchModel.awayGols>matchModel.homeGols){aLeagueClubs[i].win += 1;aLeagueClubs[i].points += 3;}else 
+					if(matchModel.awayGols===matchModel.homeGols){aLeagueClubs[i].draw += 1;aLeagueClubs[i].points += 1;}else 
+					if(matchModel.awayGols<matchModel.homeGols){aLeagueClubs[i].lose += 1;}
+
+					position2 = i;
+				}
+			}
+			const positioCalculation = ((position)=>{
+				let changePosition ;
+				while(changePosition !== 1){
+					changePosition = 1;
+					for(let j = 0; j<aLeagueClubs.length;j++){
+						if(aLeagueClubs[position].position === aLeagueClubs[j].position+1){
+							if(aLeagueClubs[position].points > aLeagueClubs[j].points || 
+							(aLeagueClubs[position].points === aLeagueClubs[j].points && aLeagueClubs[position].balance > aLeagueClubs[j].balance) ||
+							(aLeagueClubs[position].points === aLeagueClubs[j].points && aLeagueClubs[position].balance === aLeagueClubs[j].balance && aLeagueClubs[position].gols_score > aLeagueClubs[j].gols_score)){
+								aLeagueClubs[j].position += 1;
+								aLeagueClubs[position].position -= 1;
+								changePosition++;
+							}
+						}else if(aLeagueClubs[position].position === aLeagueClubs[j].position-1){
+							if(aLeagueClubs[position].points < aLeagueClubs[j].points || 
+							(aLeagueClubs[position].points === aLeagueClubs[j].points && aLeagueClubs[position].balance < aLeagueClubs[j].balance) ||
+							(aLeagueClubs[position].points === aLeagueClubs[j].points && aLeagueClubs[position].balance === aLeagueClubs[j].balance && aLeagueClubs[position].gols_score < aLeagueClubs[j].gols_score)){
+								aLeagueClubs[j].position -= 1;
+								aLeagueClubs[position].position += 1;
+								changePosition++;
+							}
+						}
+					}
+				}
+			});
+			positioCalculation(position1);
+			positioCalculation(position2);
+			
+			for(let i = 0 ; i < aLeagueClubs.length;i++){
+				this.onPutClubsAfterAddStats(aLeagueClubs[i]);
+			};	
+		},
+
+		onPutClubsAfterAddStats:function(oClubDataModel){
+			$.ajax({
+				url: `/odata/v4/clubapp/Clubs(${oClubDataModel.ID})`,
+				type: "PUT",
+				processData: false,
+				dataType: "json", 
+				contentType: "application/json",
+				data: JSON.stringify(oClubDataModel),
+				success: function () {
+					MessageToast.show("Club details updated.");
+				},
+				error: function () {
+					MessageToast.show("Server Send Error");
+				}
+			});
 		},
 
 		refresh: function(){
@@ -294,13 +404,14 @@ sap.ui.define([
 		editDialogOpen: function (oModel) {
 			
 			if(oModel.getData().homeGols !== null){
-				MessageBox.error("Nie można edytowć wydarzenia, które już zostało rozegrane.", {
+				MessageBox.error("You cannot edit an match that has already been played.", {
 					actions: [ MessageBox.Action.CLOSE]
 				});
 				return;
 			}
 			var oEditDialog = this.getView().byId("editDialog");
 			this.selectItemName("editEventLeagueSelect",oModel.getData().league);
+			this.editLeagueSelected();
 			this.byId("eventDataAndTimePickerEdit").setProperty("dateValue",UI5Date.getInstance(oModel.getData().dateEvent));
 			this.byId("eventDataAndTimePickerEdit").setProperty("value",oModel.getData().dateEventString);
 			this.byId("editStepInput").setValue(oModel.getData().round);
@@ -319,7 +430,7 @@ sap.ui.define([
 			let that = this;
 
 			if(oEditHomeClubSelectedItem === null || oEditAwayClubSelectedItem === null || dataValue === null){
-				MessageBox.error("Wybierz Dane Klubów.", {
+				MessageBox.error("Select Club Details.", {
 					actions: [ MessageBox.Action.CLOSE]
 				});
 				return;
@@ -336,7 +447,7 @@ sap.ui.define([
 			let dataValueString = this.byId("eventDataAndTimePickerEdit").getProperty("value");
 			let roundValue = this.byId("editStepInput").getValue();
 			if(editHomeClubID===editAwayClubID){
-				MessageBox.error("Nie można edytować wydarzenia. Błędne wybranie danych.", {
+				MessageBox.error("The event cannot be edited. Incorrect data selection.", {
 					actions: [ MessageBox.Action.CLOSE],
 					emphasizedAction: MessageBox.Action.CLOSE,
 					onClose: function () {
@@ -365,7 +476,7 @@ sap.ui.define([
 					contentType: "application/json",
 					data: JSON.stringify(oPayload),
 					success: function () {
-						MessageToast.show("Edytowano wydarzenie.");
+						MessageToast.show("The match has been edited.");
 						that.refresh();
 					},
 					error: function () {
@@ -374,7 +485,7 @@ sap.ui.define([
 				  });
 				  this.getView().byId("editDialog").close();
 			} else {
-				MessageBox.warning("Nie edytowano wydarzenia.", {
+				MessageBox.warning("The match was not edited.", {
 					actions: [ MessageBox.Action.CANCEL],
 				});
 			}
@@ -415,7 +526,7 @@ sap.ui.define([
 			}
 
 			this.byId("eventTable").getBinding("rows").filter(this._oGlobalFilter, "Application");
-		},
+		}
 		
 	});
 
