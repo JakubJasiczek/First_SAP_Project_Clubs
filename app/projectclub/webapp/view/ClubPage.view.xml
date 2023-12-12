@@ -31,7 +31,7 @@
                     width="320px"
                     selectedKey="subItem3">
 					<tnt:NavigationListItem 
-						id="eventPage" icon="add" text="{i18n>CreateEvent}" select="openCreateEvent">
+						id="eventPage" icon="add" text="{i18n>CreateEvent}" select="onCreateEvent">
 					</tnt:NavigationListItem>
                 </tnt:NavigationList>
                 <tnt:NavigationList
@@ -44,7 +44,7 @@
                         text="{name}" 
                         key="rootItem1" 
                         icon="sap-icon://employee"
-						select="onNavBack1">
+						select="onTablePage">
                     </tnt:NavigationListItem>
                 </tnt:NavigationList>
 			</Page>
@@ -441,7 +441,7 @@
                                     }"
                                     width="100%"
                                     selectionMode="None"
-                                    cellClick="onMakeClubModel"
+                                    cellClick="onMatchPage"
                                     >
                                     <ui:rowSettingsTemplate>
                                         <ui:RowSettings id="clubPageResultTableRowSettings" highlight="{= ${allMatches>homeGols} !== null ? null : 'Error'}" />
@@ -495,8 +495,7 @@
                                     }"
                                     width="100%"
                                     selectionMode="None"
-                                    >
-                                    
+                                    cellClick="onMatchPage">
                                     <ui:columns>
                                         <ui:Column id="noResultMatchesDataColumn" width="200px" resizable="false">
                                             <Label id="noResultMatchesDataColumnLabel" text="{i18n>DateOfMatch}"/>

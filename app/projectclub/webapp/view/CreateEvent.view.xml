@@ -42,7 +42,7 @@
             <Page 
                 id="detailClubInformationPage"
                 showNavButton="true"
-		        navButtonPress="onNavBack1"
+		        navButtonPress="onTablePage"
                 title="{i18n>MatchCreationMenu}">
                 <content>
                     <IconTabBar 

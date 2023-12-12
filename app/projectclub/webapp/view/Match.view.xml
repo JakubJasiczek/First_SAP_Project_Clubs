@@ -1,0 +1,197 @@
+<mvc:View
+	xmlns:core="sap.ui.core"
+	controllerName="projectclub.controller.Match"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:tnt="sap.tnt"
+	xmlns:l="sap.ui.layout">
+    <Toolbar id="header" height="85px" >
+		<core:Icon id="soccerIcon" src="sap-icon://soccer" size="300%"/>
+		<Title id="headerTitle" text="SOCCER" level="H6" />
+		<ToolbarSpacer id="_headerToolbarSpacer"/>
+		<core:Icon id="searchIcon" src="sap-icon://search" size="300%"/>
+		<core:Icon id="profileIcon" src="sap-icon://person-placeholder" size="300%"/>
+	</Toolbar>
+	<SplitApp 
+        id="matchApp"
+        initialDetail="detail"
+        initialMaster="master">
+        <masterPages>
+            <Page
+				id="masterMatchPage"
+				title="{i18n>NavigationListTitle}"
+				backgroundDesign= "List">
+				<tnt:NavigationList
+                    id="navigationLis"
+                    width="320px"
+                    selectedKey="subItem3">
+					<tnt:NavigationListItem 
+						id="eventPage" icon="add" text="{i18n>CreateEvent}" select="onCreateEvent">
+					</tnt:NavigationListItem>
+				</tnt:NavigationList>
+                <tnt:NavigationList
+                    id="navigationList"
+                    width="320px"
+                    selectedKey="subItem3"
+					items = "{/Ligi}">
+                    <tnt:NavigationListItem 
+						id="_LigiNavigationListItem" 
+                        text="{name}" 
+                        key="rootItem1" 
+                        icon="sap-icon://employee"
+						select="onTablePage">
+                    </tnt:NavigationListItem>
+                </tnt:NavigationList>
+			</Page>
+        </masterPages>
+        <detailPages>
+			<Page 
+                id="detailMatchPage"
+                showNavButton="true"
+		        navButtonPress="onNavBack"
+                title="{i18n>MatchCreationMenu}">
+				<f:SimpleForm 
+					id="matchSimpleFrom"
+					layout="ResponsiveGridLayout"
+					labelSpanXL="1"
+					labelSpanL="1"
+					labelSpanM="1"
+					labelSpanS="1"
+					columnsXL="21"
+					columnsL="21"
+					columnsM="21"
+					singleContainerFullSize="true">
+					<f:content>
+						<Label id="dataStatsLabel" text="{i18n>EventDate}"/>
+						<Text id="leagueName" text="{league}: round {round}" textAlign="Center"/>
+
+						<Label id="roundAndLeagueStatsLabel" text="{i18n>Round/League}" />
+						
+						<VBox id="homeNameVbox" >
+							<Text id="homeName" text="{homeName} "/>
+						</VBox>
+						<VBox id="dateEventVbox" >
+						 	<Text id="dateEvent" text="{dateEvent}"/>
+							<Title id="titleResult" text="{homeGols}-{awayGols}" titleStyle="H1"/>
+						</VBox>
+						<VBox id="awayNameVbox" >
+						 	
+							<Text id="awayName" text=" {awayName}"/>
+						</VBox>
+						
+						<Label id="homeNameStatsLabel" text="{i18n>Clubs}" />
+						<ComboBox id="statsHomeNameComboBox"  
+							items="{
+							path: '/Clubs',
+							sorter: { path: 'name' }
+							}"
+							editable="false"
+							textAlign="Center">
+							<core:Item id="statsHomeNameComboBoxItem" text="{name}" key="{ID}"/>
+							<layoutData>
+								<l:GridData id="_IDGenGridData2" span="XL4 L4 M4 S4" />
+							</layoutData>
+						</ComboBox>
+						<ComboBox id="statsAwayNameComboBox"  
+							items="{
+							path: '/Clubs',
+							sorter: { path: 'name' }
+							}"
+							editable="false"
+							textAlign="Center">
+							<core:Item id="statsAwayNameComboBoxItem" text="{name}" key="{ID}"/>
+							<layoutData>
+								<l:GridData id="_IDGenGridData11" span="XL4 L4 M4 S4" />
+							</layoutData>
+						</ComboBox>
+						<Label id="golsStatsLabel" text="{i18n>Goals}"/>
+						<StepInput
+							id="homeGolsStepInput"
+							value="0"
+							min="0"
+							max="40"
+							textAlign="Center" >
+							<layoutData>
+								<l:GridData id="_IDGenGridData3" span="XL4 L4 M4 S4" />
+							</layoutData>
+						</StepInput>
+						<StepInput 
+							id="awayGolsStepInput"
+							value="0"
+							min="0"
+							max="40"
+							textAlign="Center">
+							<layoutData>
+								<l:GridData id="_IDGenGridData10" span="XL4 L4 M4 S4" />
+							</layoutData>
+						</StepInput>
+						<Label id="nextStatsLabel" text="{i18n>CornerKicks}"/>
+						<StepInput 
+							id="homeCornersStepInput"
+							value="0"
+							min="0"
+							max="40"
+							textAlign="Center">
+							<layoutData>
+								<l:GridData id="_IDGenGridData6" span="XL4 L4 M4 S4" />
+							</layoutData>
+						</StepInput>
+						<StepInput 
+							id="awayCornersStepInput"
+							value="0"
+							min="0"
+							max="40"
+							textAlign="Center">
+							<layoutData>
+								<l:GridData id="_IDGenGridData7" span="XL4 L4 M4 S4" />
+							</layoutData>
+						</StepInput>
+						<Label id="YCStatsLabel" text="{i18n>YellowCards}"/>
+						<StepInput 
+							id="homeYCStepInput"
+							value="0"
+							min="0"
+							max="40"
+							textAlign="Center">
+							<layoutData>
+								<l:GridData id="_IDGenGridData4" span="XL4 L4 M4 S4" />
+							</layoutData>
+						</StepInput>
+						<StepInput 
+							id="awayYCStepInput"
+							value="0"
+							min="0"
+							max="40"
+							textAlign="Center">
+							<layoutData>
+								<l:GridData id="_IDGenGridData9" span="XL4 L4 M4 S4" />
+							</layoutData>
+						</StepInput>
+						<Label id="CornersStatsLabel" text="{i18n>RedCards}"/>
+						<StepInput 
+							id="homeRCStepInput"
+							value="0"
+							min="0"
+							max="40"
+							textAlign="Center">
+							<layoutData>
+								<l:GridData id="_IDGenGridData5" span="XL4 L4 M4 S4" />
+							</layoutData>
+						</StepInput>
+						<StepInput 
+							id="awayRCStepInput"
+							value="0"
+							min="0"
+							max="40"
+							textAlign="Center">
+							<layoutData>
+								<l:GridData id="_IDGenGridData8" span="XL4 L4 M4 S4" />
+							</layoutData>
+						</StepInput>
+					</f:content>
+				</f:SimpleForm>
+			</Page>
+		</detailPages>
+    </SplitApp>
+</mvc:View>

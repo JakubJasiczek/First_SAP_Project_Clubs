@@ -11,6 +11,25 @@ sap.ui.define([
 			return UIComponent.getRouterFor(this);
 		},
 
+		onMatchPage : function (oEvent) {
+			if (oEvent.getParameter("columnId") != this.getView().createId("resultMatchesNameColumn") && oEvent.getParameter("columnId") != this.getView().createId("noResultMatchesNameColumn")) {
+				return; //Custom context menu for product id column only
+			}
+
+			let oRowContext = oEvent.getParameter("rowBindingContext").getProperty("ID");
+			this.getRouter().navTo("match",{
+				ID : oRowContext
+			});
+		},
+
+		onTablePage: function(){ 
+			this.getRouter().navTo("RouteMain_view");
+		},
+
+		onCreateEvent: function() {
+			this.getRouter().navTo("createEvent");
+		},
+
 		onNavBack: function () {
 			var oHistory, sPreviousHash;
 

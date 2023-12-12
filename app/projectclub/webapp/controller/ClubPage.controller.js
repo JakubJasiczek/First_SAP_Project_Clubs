@@ -25,14 +25,6 @@ sap.ui.define([
 			
 		},
 
-		onNavBack1: function(){ 
-			this.getRouter().navTo("RouteMain_view");
-		},
-
-		openCreateEvent: function() {
-			this.getRouter().navTo("createEvent");
-		},
-
 		_onRouteMatched: function(oEvent) {
 			this.getView().bindElement({
 				path : "/Clubs(" + oEvent.getParameter("arguments").ID + ")",

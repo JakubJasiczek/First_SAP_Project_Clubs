@@ -1,8 +1,12 @@
 <mvc:View controllerName="projectclub.controller.App"
     xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-    xmlns="sap.m">
+    xmlns="sap.m"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:tnt="sap.tnt"
+	xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core">
     <App id="app">
-    
+
     </App>
 </mvc:View>

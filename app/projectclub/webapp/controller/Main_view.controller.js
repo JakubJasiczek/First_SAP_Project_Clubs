@@ -34,13 +34,6 @@ sap.ui.define([
                 this.clearAllSortings();
             },
 
-            onDisplayNotFound : function () {
-                // display the "notFound" target without changing the hash
-                /*this.getRouter().getTargets().display("notFound", {
-                    fromTarget : "TargetMain_view"
-                });*/
-            },
-
             openClubPage: function (oEvent) {
                 if (oEvent.getParameter("columnId") != this.getView().createId("name")) {
                     return; //Custom context menu for product id column only
@@ -50,10 +43,6 @@ sap.ui.define([
                 this.getRouter().navTo("clubPage",{
                     ID : oRowContext
                 });
-            },
-
-            openCreateEvent: function() {
-                this.getRouter().navTo("createEvent");
             },
 
             sortLigi: function (oEvent) {

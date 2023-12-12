@@ -26,9 +26,7 @@ sap.ui.define([
 			this.byId("eventDataAndTimePickerEdit").setProperty("dateValue",null);
 		},
 
-		onNavBack1: function(){ 
-			this.getRouter().navTo("RouteMain_view");
-		},
+		
 
 		restartSelects: function(){
 			this.byId("eventDataAndTimePicker").setProperty("dateValue",null);
