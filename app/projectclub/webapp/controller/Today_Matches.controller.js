@@ -27,7 +27,6 @@ sap.ui.define([
                 setTimeout(()=>{
                     let oTable = this.getView().byId("todayMatchesTable");          //Get hold of table
                     let oRowsBinding = oTable.getBinding("rows").aContexts.length;
-                    console.log(oRowsBinding)
                     this.byId("todayMatchesTable").setVisibleRowCount(oRowsBinding)
                     if(oRowsBinding===0){this.byId("todayMatchesTable").setVisible(false);this.byId("im").setVisible(true)}
                     else {this.byId("todayMatchesTable").setVisible(true);this.byId("im").setVisible(false)}

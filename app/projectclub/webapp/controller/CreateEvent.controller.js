@@ -504,7 +504,6 @@ sap.ui.define([
 
 		sortLigi: function (oEvent) {
 			let oLiga = oEvent.getParameter("value");
-			console.log(oLiga)
 			this._oLeagueFilter = new Filter({
 				path: "league", 
 				operator: FilterOperator.Contains, 
