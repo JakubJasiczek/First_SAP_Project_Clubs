@@ -4,238 +4,193 @@
     xmlns:tnt="sap.tnt"
     xmlns:ui="sap.ui.table"
 	height="100%">
-	<Toolbar id="header" height="85px" >
-		<core:Icon id="soccerIcon" src="sap-icon://soccer" size="300%" press=""/>
-		<Title id="headerTitle" text="{i18n>PageTitle}" level="H6" />
-		<ToolbarSpacer id="_headerToolbarSpacer"/>
-		<Button id="_testButton" text="{i18n>DisplayNotFound}" class="sapUiTinyMarginEnd" press="onMatchPage"/>
-		<core:Icon id="searchIcon" src="sap-icon://search" size="300%" />
-		<core:Icon id="profileIcon" src="sap-icon://person-placeholder" size="300%"/>
-	</Toolbar>
-    <SplitApp
-		id="SplitAppDemo"
-		initialDetail="detail"
-		initialMaster="master">
-		<detailPages>
-			<Page
-				id="title"
-				title="Tabela Kluby"
-				backgroundDesign= "Solid"
-				enableScrolling="true">
-				<headerContent>
-					<Button id="refreshTableButton" icon="sap-icon://refresh" press="refresh" tooltip="{i18n>Refresh}"/>
-					<Button id="clear" 
-							icon="sap-icon://decline" 
-							tooltip="{i18n>ClearSorting}"
-							press="clearAllSortings"/>
-					<SearchField 
-							id = "search"
-							placeholder="{i18n>Search}"
-							value="{ui>/globalFilter}"
-							search="filterGlobally"
-							width="15rem"/>	
-				</headerContent>
-				<ui:Table
-					id="table"
-					selectionMode="None"
-					rows="{path:'/Clubs'}"
-					visibleRowCountMode="Fixed"
-					width="100%"
-					cellClick="openClubPage"
-					columnSelect="sortTable"
-					rowActionCount="18"
-					alternateRowColors="true"
-					visibleRowCount="18">
-					<ui:rowSettingsTemplate>
-						<ui:RowSettings id="mainTableRowSettings" highlight="{= ${position} > 1 ? ${position} > 4 ? ${position} > 6 ? ${position} > 15 ? 'Error' : null : 'Warning' : 'Information': 'Success'}" />
-					</ui:rowSettingsTemplate>
-					<ui:columns>
-						<ui:Column
-							id="position"
-							width="3rem"
-							resizable="false"
-							sortProperty="position"
-							showSortMenuEntry="false">
-							<Label id="_PositionLabel" text="#" />
-							<ui:template>
-								<Text id="position_text" text="{position}" wrapping="false"  />
-							</ui:template>
-						</ui:Column>
-						<ui:Column
-							id="logo"
-							width="2rem"
-							sortProperty="name"
-							sortOrder="Ascending"
-							resizable="false"
-							showSortMenuEntry="false">
-							<Label id="_logoLabel" />
-							<ui:template>
-								<Image id="clubImage" src="{logo}" width="100%" />
-							</ui:template>
-						</ui:Column>
-						<ui:Column
-							id="name"
-							width="11rem"
-							sortProperty="name"
-							sortOrder="Ascending"
-							resizable="false"
-							showSortMenuEntry="false">
-							<Label id="_NameLabel" text="Team" />
-							<ui:template>
-								<Text id = "name_text" text="{name}" wrapping="false" />
-							</ui:template>
-						</ui:Column>
-						<ui:Column
-							id="points"
-							width="3rem"
-							sortProperty="points"
-							resizable="false"
-							showSortMenuEntry="false">
-							<Label id="_PointsLabel" text="P" />
-							<ui:template>
-								<Text id = "points_text" text="{points}" wrapping="false" />
-							</ui:template>
-						</ui:Column>
-						<ui:Column 
-							id="match"
-							width="3rem"
-							sortProperty="match"
-							resizable="false"
-							showSortMenuEntry="false">
-							<Label id="_MatchLabel" text="M" />
-							<ui:template>
-								<Text id = "match_text" text="{match}" wrapping="false" />
-							</ui:template>
-						</ui:Column>
-						<ui:Column 
-							id = "win"
-							width="3rem"
-							sortProperty="win"
-							resizable="false"
-							showSortMenuEntry="false">
-							<Label id="_WinLabel" text="W" />
-							<ui:template>
-								<Text id = "win_text" text="{win}" wrapping="false" />
-							</ui:template>
-						</ui:Column>
-						<ui:Column 
-							id = "draw"
-							width="3rem"
-							sortProperty="draw"
-							resizable="false"
-							showSortMenuEntry="false">
-							<Label id="_DrawLabel" text="D" />
-							<ui:template>
-								<Text id = "draw_text" text="{draw}" wrapping="false" />
-							</ui:template>
-						</ui:Column>
-						<ui:Column 
-							id = "lose"
-							width="3rem"
-							sortProperty="lose"
-							resizable="false"
-							showSortMenuEntry="false">
-							<Label id="_LoseLabel" text="L" />
-							<ui:template>
-								<Text id = "false_text" text="{lose}" wrapping="false" />
-							</ui:template>
-						</ui:Column>
-						<ui:Column 
-							id = "gols"
-							width="4.5rem"
-							sortProperty="gols_lose"
-							resizable="false"
-							showSortMenuEntry="false">
-							<Label id="_GolsScoreAndLoseLabel" text="+/-" />
-							<ui:template>
-								<Text id = "gols_text" text="{gols_score}:{gols_lose}" wrapping="false" />
-							</ui:template>
-						</ui:Column>
-						<ui:Column
-							id = "balance" 
-							width="4.5rem"
-							sortProperty="gols_score"
-							resizable="false"
-							showSortMenuEntry="false"
-							>
-							<Label id="_balanceLabel" text="B" />
-							<ui:template>
-								<Text id = "balance_text" text="{balance}" wrapping="false" textAlign="Center" />
-							</ui:template>
-						</ui:Column>
-					</ui:columns>
-					<ui:footer>
-						<Panel id="footerPanel">
-							<HBox id="_ChampionGenBox" >
-								<core:Icon 
-									id="championIcon" 
-									src="sap-icon://color-fill"
-									color="#41CC03"/>
-								<Text 
-									id = "championText" 
-									text="{i18n>Champion}"/>
-							</HBox>
-							<HBox id="_LMGenBox" >
-								<core:Icon 
-									id="lmIcon" 
-									src="sap-icon://color-fill"
-									color="#5A92FF"/>
-								<Text 
-									id = "lmText" 
-									text="{i18n>ChamionsLeagus}"/>
-							</HBox>
-							<HBox id="_LKGenBox" >
-								<core:Icon 
-									id="lkIcon" 
-									src="sap-icon://color-fill"
-									color="#f9a615"/>
-								<Text 
-									id = "lkText" 
-									text="{i18n>QualificationLE}"/>
-							</HBox>
-							<HBox id="_SpadekGenBox" >
-								<core:Icon 
-									id="fallIcon" 
-									src="sap-icon://color-fill"
-									color="#AE0D0D"/>
-								<Text 
-									id = "fallText" 
-									text="{i18n>Relegation}"/>
-							</HBox>
-						</Panel>
-					</ui:footer>
-				</ui:Table>
-			</Page>
-		</detailPages>
-		<masterPages>
-			<Page
-				id="master"
-				title="{i18n>NavigationListTitle}"
-				backgroundDesign= "List">
-				<tnt:NavigationList
-                    id="navigationLis"
-                    width="320px"
-                    selectedKey="subItem3">
-					<tnt:NavigationListItem 
-						id="eventPage" icon="add" text="{i18n>CreateEvent}" select="onCreateEvent">
-					</tnt:NavigationListItem>
-                </tnt:NavigationList>
-                <tnt:NavigationList
-                    id="navigationList"
-                    width="320px"
-                    selectedKey="subItem3"
-					items = "{/Ligi}">
-                    <tnt:NavigationListItem 
-						id="_LigiNavigationListItem" 
-                        text="{name}" 
-                        key="rootItem1" 
-                        icon="sap-icon://employee"
-						select="sortLigi">
-                    </tnt:NavigationListItem>
-					
-                </tnt:NavigationList>
-			</Page>
-		</masterPages>
-	</SplitApp>
-
+	<Page
+		id="title"
+		title="Tabela Kluby"
+		backgroundDesign= "Solid"
+		enableScrolling="true">
+		<headerContent>
+			<Button id="refreshTableButton" icon="sap-icon://refresh" press="refresh" tooltip="{i18n>Refresh}"/>
+			<Button id="clear" 
+					icon="sap-icon://decline" 
+					tooltip="{i18n>ClearSorting}"
+					press="clearAllSortings"/>
+			<SearchField 
+					id = "search"
+					placeholder="{i18n>Search}"
+					value="{ui>/globalFilter}"
+					search="filterGlobally"
+					width="15rem"/>	
+		</headerContent>
+		<ui:Table
+			id="table"
+			selectionMode="None"
+			rows="{path:'/Clubs'}"
+			visibleRowCountMode="Fixed"
+			width="100%"
+			cellClick="openClubPage"
+			columnSelect="sortTable"
+			rowActionCount="18"
+			alternateRowColors="true"
+			visibleRowCount="18">
+			<ui:rowSettingsTemplate>
+				<ui:RowSettings id="mainTableRowSettings" highlight="{= ${position} > 1 ? ${position} > 4 ? ${position} > 6 ? ${position} > 17 ? 'Error' : null : 'Warning' : 'Information': 'Success'}" />
+			</ui:rowSettingsTemplate>
+			<ui:columns>
+				<ui:Column
+					id="position"
+					width="3rem"
+					resizable="false"
+					sortProperty="position"
+					showSortMenuEntry="false">
+					<Label id="_PositionLabel" text="#" />
+					<ui:template>
+						<Text id="position_text" text="{position}" wrapping="false"  />
+					</ui:template>
+				</ui:Column>
+				<ui:Column
+					id="logo"
+					width="2rem"
+					sortProperty="name"
+					sortOrder="Ascending"
+					resizable="false"
+					showSortMenuEntry="false">
+					<Label id="_logoLabel" />
+					<ui:template>
+						<Image id="clubImage" src="{logo}" width="100%" />
+					</ui:template>
+				</ui:Column>
+				<ui:Column
+					id="name"
+					width="11rem"
+					sortProperty="name"
+					sortOrder="Ascending"
+					resizable="false"
+					showSortMenuEntry="false">
+					<Label id="_NameLabel" text="Team" />
+					<ui:template>
+						<Text id = "name_text" text="{name}" wrapping="false" />
+					</ui:template>
+				</ui:Column>
+				<ui:Column
+					id="points"
+					width="3rem"
+					sortProperty="points"
+					resizable="false"
+					showSortMenuEntry="false">
+					<Label id="_PointsLabel" text="P" />
+					<ui:template>
+						<Text id = "points_text" text="{points}" wrapping="false" />
+					</ui:template>
+				</ui:Column>
+				<ui:Column 
+					id="match"
+					width="3rem"
+					sortProperty="match"
+					resizable="false"
+					showSortMenuEntry="false">
+					<Label id="_MatchLabel" text="M" />
+					<ui:template>
+						<Text id = "match_text" text="{match}" wrapping="false" />
+					</ui:template>
+				</ui:Column>
+				<ui:Column 
+					id = "win"
+					width="3rem"
+					sortProperty="win"
+					resizable="false"
+					showSortMenuEntry="false">
+					<Label id="_WinLabel" text="W" />
+					<ui:template>
+						<Text id = "win_text" text="{win}" wrapping="false" />
+					</ui:template>
+				</ui:Column>
+				<ui:Column 
+					id = "draw"
+					width="3rem"
+					sortProperty="draw"
+					resizable="false"
+					showSortMenuEntry="false">
+					<Label id="_DrawLabel" text="D" />
+					<ui:template>
+						<Text id = "draw_text" text="{draw}" wrapping="false" />
+					</ui:template>
+				</ui:Column>
+				<ui:Column 
+					id = "lose"
+					width="3rem"
+					sortProperty="lose"
+					resizable="false"
+					showSortMenuEntry="false">
+					<Label id="_LoseLabel" text="L" />
+					<ui:template>
+						<Text id = "false_text" text="{lose}" wrapping="false" />
+					</ui:template>
+				</ui:Column>
+				<ui:Column 
+					id = "gols"
+					width="4.5rem"
+					sortProperty="gols_lose"
+					resizable="false"
+					showSortMenuEntry="false">
+					<Label id="_GolsScoreAndLoseLabel" text="+/-" />
+					<ui:template>
+						<Text id = "gols_text" text="{gols_score}:{gols_lose}" wrapping="false" />
+					</ui:template>
+				</ui:Column>
+				<ui:Column
+					id = "balance" 
+					width="4.5rem"
+					sortProperty="gols_score"
+					resizable="false"
+					showSortMenuEntry="false"
+					>
+					<Label id="_balanceLabel" text="B" />
+					<ui:template>
+						<Text id = "balance_text" text="{balance}" wrapping="false" textAlign="Center" />
+					</ui:template>
+				</ui:Column>
+			</ui:columns>
+			<ui:footer>
+				<Panel id="footerPanel">
+					<HBox id="_ChampionGenBox" >
+						<core:Icon 
+							id="championIcon" 
+							src="sap-icon://color-fill"
+							color="#41CC03"/>
+						<Text 
+							id = "championText" 
+							text="{i18n>Champion}"/>
+					</HBox>
+					<HBox id="_LMGenBox" >
+						<core:Icon 
+							id="lmIcon" 
+							src="sap-icon://color-fill"
+							color="#5A92FF"/>
+						<Text 
+							id = "lmText" 
+							text="{i18n>ChamionsLeagus}"/>
+					</HBox>
+					<HBox id="_LKGenBox" >
+						<core:Icon 
+							id="lkIcon" 
+							src="sap-icon://color-fill"
+							color="#f9a615"/>
+						<Text 
+							id = "lkText" 
+							text="{i18n>QualificationLE}"/>
+					</HBox>
+					<HBox id="_SpadekGenBox" >
+						<core:Icon 
+							id="fallIcon" 
+							src="sap-icon://color-fill"
+							color="#AE0D0D"/>
+						<Text 
+							id = "fallText" 
+							text="{i18n>Relegation}"/>
+					</HBox>
+				</Panel>
+			</ui:footer>
+		</ui:Table>
+	</Page>
 </mvc:View>

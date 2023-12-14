@@ -146,6 +146,14 @@
           "pattern": "match/{ID}",
           "name": "match",
           "target": "match"
+        }, {
+          "pattern": "today_Matches",
+          "name": "today_Matches",
+          "target": "today"
+        }, {
+          "pattern": "main_View/{name}/{ID}",
+          "name": "main_View",
+          "target": "table"
         }
       ],
       "targets": {
@@ -154,8 +162,8 @@
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
-          "viewId": "Main_view",
-          "viewName": "Main_view"
+          "viewId": "Today_Matches",
+          "viewName": "Today_Matches"
         },
         "appHome": {
           "id": "app",
@@ -167,6 +175,11 @@
             "name": "Match",
             "Level": 2
         },
+        "today": {
+          "id": "today_Matches",
+          "name": "Today_Matches",
+          "Level": 2
+      },
         "club": {
           "id": "clubPage",
           "name": "ClubPage",
@@ -176,6 +189,11 @@
         "id": "createEvent",
         "name": "CreateEvent",
         "Level": 2
+    }, 
+    "table": {
+      "id": "main_View",
+      "name": "Main_view",
+      "Level": 2
     }
       }
     },

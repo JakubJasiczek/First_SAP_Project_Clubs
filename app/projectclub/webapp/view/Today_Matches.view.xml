@@ -1,0 +1,78 @@
+<mvc:View
+	xmlns:core="sap.ui.core"
+	controllerName="projectclub.controller.Today_Matches"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+    xmlns:ui="sap.ui.table">
+    <Page
+        id="title"
+        title="{i18n>MatchesOfTheDay}"
+        backgroundDesign= "Solid"
+        enableScrolling="true">
+        <ui:Table
+            id="todayMatchesTable"
+            selectionMode="None"
+            rows="{
+                    path: '/Match',
+                    sorter:{
+                        path:'dateEvent',
+                        descending : false
+                    }
+                }"
+            width="100%"
+            visibleRowCount="1000">
+            <ui:columns>
+                <ui:Column
+                    id="league"
+                    resizable="false"
+                    showSortMenuEntry="false"
+                    width="12rem">
+                    <Label id="_LeagueLabel" text="{i18n>League}" />
+                    <ui:template>
+                        <Text id="league_text" text="{league}" wrapping="false" textAlign="Center" />
+                    </ui:template>
+                </ui:Column>
+                <ui:Column
+                    id="dateEventColumn"
+                    resizable="false"
+                    showSortMenuEntry="false"
+                    sortProperty="dateEvent" 
+                    sorted="true" 
+                    sortOrder="Ascending"
+                    width="12rem">
+                    <Label id="_dateEventLabel" text="{i18n>MatchDateAndTime}" textAlign="Center"/>
+                    <ui:template>
+                        <Text id="dateEventText" text="{dateEventString}" width="100%" />
+                    </ui:template>
+                </ui:Column>
+                <ui:Column
+                    id="clubNameColumn"
+                    resizable="false"
+                    showSortMenuEntry="false">
+                    <Label id="_clubNameLabel" text="{i18n>ClubsName}" />
+                    <ui:template>
+                        <Text id="clubName_text" text="{homeName}-{awayName}" width="100%" />
+                    </ui:template>
+                </ui:Column>
+                <ui:Column
+                    id="resultColumn"
+                    resizable="false"
+                    showSortMenuEntry="false"
+                    width="6rem">
+                    <Label id="_resultLabel" text="{i18n>Result}" />
+                    <ui:template>
+                        <Text id="result_text" text="{homeGols}-{awayGols}" width="100%" />
+                    </ui:template>
+                </ui:Column>
+            </ui:columns>
+        </ui:Table>
+        <IllustratedMessage
+			id="im"
+			illustrationSize="Scene"
+			enableVerticalResponsiveness="true"
+            title="{i18n>Title}"
+            description="{i18n>Description}"
+            visible="false">
+		</IllustratedMessage>
+    </Page>
+</mvc:View>

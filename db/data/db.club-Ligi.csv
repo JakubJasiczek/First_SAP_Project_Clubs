@@ -1,4 +1,7 @@
-ID;name
-7abf0c3b-1bed-4596-951c-731cbac2aeda;Premier League
-d973936b-703d-4b01-a3e4-ed2933af5dc6;Bundesliga
-66b64b3f-1520-4cd7-aebd-3c9d95910692;PKO BP Ekstraklasa
+ID;name;logo
+0f14c421-168c-4461-a3b4-fe1071360890;Premier League;https://static.wikia.nocookie.net/fulham/images/7/76/Premier_League.png/revision/latest?cb=20180528093231
+3973936b-703d-4b01-a3e4-ed2933af5dc6;Bundesliga;https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Bundesliga_logo_%282017%29.svg/1200px-Bundesliga_logo_%282017%29.svg.png
+46b64b3f-1520-4cd7-aebd-3c9d95910692;PKO BP Ekstraklasa;https://static.wikia.nocookie.net/tmobile-ekstraklasa/images/e/e6/Site-logo.png/revision/latest?cb=20230520231606&path-prefix=pl
+2aef14b4-079c-4d47-916a-9d8021d5355f;La Liga;https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/LaLiga_Santander_logo_%28stacked%29.svg/1197px-LaLiga_Santander_logo_%28stacked%29.svg.png
+5abf0c3b-1bed-4596-951c-731cbac2aeda;Seria A;https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Serie_A_logo_2022.svg/1200px-Serie_A_logo_2022.svg.png
+156fb231-39d0-4125-b0c4-9a44b43b5483;Ligue 1;https://upload.wikimedia.org/wikipedia/en/c/cd/Ligue_1_Uber_Eats_logo.svg

@@ -21,6 +21,7 @@ entity Clubs : cuid {
 
 entity Ligi : cuid {
     name : String;
+    logo : String;
     clubs : Composition of many Clubs on clubs.liga = $self;
     match : Composition of many Match on match.league_id = $self;
 };

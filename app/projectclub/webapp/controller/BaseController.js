@@ -12,7 +12,7 @@ sap.ui.define([
 		},
 
 		onMatchPage : function (oEvent) {
-			if (oEvent.getParameter("columnId") != this.getView().createId("resultMatchesNameColumn") && oEvent.getParameter("columnId") != this.getView().createId("noResultMatchesNameColumn")) {
+			if (oEvent.getParameter("columnId") != this.getView().createId("resultMatchesNameColumn") && oEvent.getParameter("columnId") != this.getView().createId("noResultMatchesNameColumn") && oEvent.getParameter("columnId") != this.getView().createId("eventNameColumn") ) {
 				return; //Custom context menu for product id column only
 			}
 
@@ -22,16 +22,24 @@ sap.ui.define([
 			});
 		},
 
-		onTablePage: function(){ 
-			this.getRouter().navTo("RouteMain_view");
+		onTablePage: function(oEvent){ 
+			let oLiga = oEvent.getSource().getBindingContext().getObject();
+			this.getRouter().navTo("main_View",{
+				ID : oLiga.ID,
+				name: oLiga.name
+			});
 		},
 
 		onCreateEvent: function() {
 			this.getRouter().navTo("createEvent");
 		},
+		
+		onTodayMatches: function() {
+			this.getRouter().navTo("RouteMain_view");
+		},
 
 		onNavBack: function () {
-			var oHistory, sPreviousHash;
+			let oHistory, sPreviousHash;
 
 			oHistory = History.getInstance();
 			sPreviousHash = oHistory.getPreviousHash();

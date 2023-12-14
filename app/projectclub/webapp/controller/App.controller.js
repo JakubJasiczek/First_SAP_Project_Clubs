@@ -1,6 +1,5 @@
 sap.ui.define(
     [
-        "sap/ui/core/mvc/Controller",
         "projectclub/controller/BaseController"
     ],
     function(BaseController) {

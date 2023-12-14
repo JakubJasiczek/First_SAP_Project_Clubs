@@ -6,7 +6,46 @@
 	xmlns:tnt="sap.tnt"
 	xmlns:l="sap.ui.layout"
     xmlns:core="sap.ui.core">
-    <App id="app">
+    <Toolbar id="header" height="85px" >
+		<core:Icon id="soccerIcon" src="sap-icon://soccer" size="300%" press="onTodayMatches"/>
+		<Title id="headerTitle" text="SOCCER" level="H6" />
+	</Toolbar>
+    <SplitApp 
+        id="clubInformationApp"
+        initialDetail="detail"
+        initialMaster="master">
+        <masterPages>
+            <Page
+				id="masterClubInformationPage"
+				title="{i18n>NavigationListTitle}"
+				backgroundDesign= "List">
+                <tnt:NavigationList
+                    id="navigationLis"
+                    width="320px"
+                    selectedKey="subItem3">
+					<tnt:NavigationListItem 
+						id="eventPage" icon="add" text="{i18n>CreateEvent}" select="onCreateEvent">
+					</tnt:NavigationListItem>
+                </tnt:NavigationList>
+                <tnt:NavigationList
+                    id="navigationList"
+                    width="320px"
+                    selectedKey="subItem3"
+					items = "{/Ligi}">
+                    <tnt:NavigationListItem 
+						id="_LigiNavigationListItem" 
+                        text="{name}" 
+                        key="rootItem1" 
+                        icon="sap-icon://employee"
+						select="onTablePage">
+                    </tnt:NavigationListItem>
+                </tnt:NavigationList>
+			</Page>
+        </masterPages>
+        <detailPages>
+            <App id="app">
 
-    </App>
+             </App>
+        </detailPages>
+    </SplitApp>
 </mvc:View>

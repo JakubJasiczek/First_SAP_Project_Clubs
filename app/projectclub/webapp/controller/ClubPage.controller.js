@@ -16,10 +16,10 @@ sap.ui.define([
 	return BaseController.extend("projectclub.controller.ClubPage", {
 
 		onInit: function () {
-			var oRouter = this.getRouter();
+			let oRouter = this.getRouter();
 			oRouter.getRoute("clubPage").attachPatternMatched(this._onRouteMatched,this);
 
-			var oImgModel = new JSONModel(sap.ui.require.toUrl("projectclub/mockdata/img.json"));
+			let oImgModel = new JSONModel(sap.ui.require.toUrl("projectclub/mockdata/img.json"));
 			this.getView().setModel(oImgModel, "img");
 			this.mainModel = this.getView().getModel();
 			
@@ -54,7 +54,7 @@ sap.ui.define([
 			oModelMatches.setData({"machtes" : aMatches});
 			this.getView().setModel(oModel,"club");
 			this.getView().setModel(oModelMatches,"allMatches");
-
+			if(data.liga_ID==="7abf0c3b-1bed-4596-951c-731cbac2aeda"){this.byId("clubPageTable").setVisibleRowCount(20)}else{this.byId("clubPageTable").setVisibleRowCount(18)}
 			this.byId("clubPageTable").bindRows({path:`/Ligi(ID=${data.liga_ID})/clubs`});
 			this._bSortColumnDescending = false;
 			this.sortByPosition();
@@ -73,22 +73,22 @@ sap.ui.define([
 		},
 
 		_filterMatchesByDate: function(){
-			var oDateFormat = DateFormat.getDateTimeInstance({
+			let oDateFormat = DateFormat.getDateTimeInstance({
 				pattern: "YYYY-MM-ddTHH:mm:ssZ",
 				strictParsing: true
 			});
 			let sDate = oDateFormat.format(UI5Date.getInstance());
 
-			var filter1 = new Filter("dateEvent", FilterOperator.LT, sDate);
-			var filter2 = new Filter("dateEvent", FilterOperator.GE, sDate);
+			let filter1 = new Filter("dateEvent", FilterOperator.LT, sDate);
+			let filter2 = new Filter("dateEvent", FilterOperator.GE, sDate);
 			this.getView().byId("resultMatchesTable").getBinding("rows").filter([filter1]);
 			this.getView().byId("noResultMatchesTable").getBinding("rows").filter([filter2]);
 		},
 
 
 		sortByPosition: function() {
-			var oTable = this.byId("clubPageTable");
-			var oPositionColumn = this.byId("clubPageTablePositionColumn");
+			let oTable = this.byId("clubPageTable");
+			let oPositionColumn = this.byId("clubPageTablePositionColumn");
 
 			oTable.sort(oPositionColumn, this._bSortColumnDescending ? SortOrder.Descending : SortOrder.Ascending , false);
 			this._bSortColumnDescending = !this._bSortColumnDescending;
@@ -100,9 +100,9 @@ sap.ui.define([
 				this.sortByPosition();
 			} else {
 				this._bSortColumnDescending = false;
-				var oTable = this.byId("clubPageTable");
-				var oPositionColumn = this.byId("clubPageTablePositionColumn");
-				var sSortProperty;
+				let oTable = this.byId("clubPageTable");
+				let oPositionColumn = this.byId("clubPageTablePositionColumn");
+				let sSortProperty;
 				
 				if(oColumnName.getProperty("sortOrder") === "Descending") {
 					sSortProperty = SortOrder.Ascending;
@@ -194,36 +194,43 @@ sap.ui.define([
 			aRestData = {
 				matches : aRestData.matches,
 				RR : aRestData.RR,
-				RRPerMatch : Math.ceil(aRestData.RR/aRestData.matches*100)/100,
+				RRPerMatch : Math.round(aRestData.RR/aRestData.matches*100)/100,
 				clubRR: aRestData.clubRR,
-				clubRRPerMatch : Math.ceil(aRestData.clubRR/aRestData.matches*100)/100,
+				clubRRPerMatch : Math.round(aRestData.clubRR/aRestData.matches*100)/100,
 				enemyRR : aRestData.enemyRR,
-				enemyRRPerMatch : Math.ceil(aRestData.enemyRR/aRestData.matches*100)/100,
+				enemyRRPerMatch : Math.round(aRestData.enemyRR/aRestData.matches*100)/100,
 				YC: aRestData.YC,
-				YCPerMatch : Math.ceil(aRestData.YC/aRestData.matches*100)/100,
+				YCPerMatch : Math.round(aRestData.YC/aRestData.matches*100)/100,
 				clubYC : aRestData.clubYC,
-				clubYCPerMatch : Math.ceil(aRestData.clubYC/aRestData.matches*100)/100,
+				clubYCPerMatch : Math.round(aRestData.clubYC/aRestData.matches*100)/100,
 				enemyYC : aRestData.enemyYC,
-				enemyYCPerMatch : Math.ceil(aRestData.enemyYC/aRestData.matches*100)/100,
+				enemyYCPerMatch : Math.round(aRestData.enemyYC/aRestData.matches*100)/100,
 				RC: aRestData.RC,
-				RCPerMatch : Math.ceil(aRestData.RC/aRestData.matches*100)/100,
+				RCPerMatch : Math.round(aRestData.RC/aRestData.matches*100)/100,
 				clubRC : aRestData.clubRC,
-				clubRCPerMatch : Math.ceil(aRestData.clubRC/aRestData.matches*100)/100,
+				clubRCPerMatch : Math.round(aRestData.clubRC/aRestData.matches*100)/100,
 				enemyRC : aRestData.enemyRC,
-				enemyRCPerMatch : Math.ceil(aRestData.enemyRC/aRestData.matches*100)/100,
+				enemyRCPerMatch : Math.round(aRestData.enemyRC/aRestData.matches*100)/100,
 				wins : aRestData.win ,
-				winsPerMatch : Math.ceil(aRestData.win/aRestData.matches*100),
+				winsPerMatch : Math.round(aRestData.win/aRestData.matches*100),
 				loses: aRestData.lose,
-				losePerMatch : Math.ceil(aRestData.lose/aRestData.matches*100),
+				losePerMatch : Math.round(aRestData.lose/aRestData.matches*100),
 				draws : aRestData.draw,
-				drawPerMatch : Math.ceil(aRestData.draw/aRestData.matches*100),
-				pointsPerMatch : Math.ceil(aRestData.pointsPerMatch/aRestData.matches*100)/100,
-				golsPerMatch : Math.ceil(aRestData.golsPerMatch/aRestData.matches*100)/100,
+				drawPerMatch : Math.round(aRestData.draw/aRestData.matches*100),
+				pointsPerMatch : Math.round(aRestData.pointsPerMatch/aRestData.matches*100)/100,
+				golsPerMatch : Math.round(aRestData.golsPerMatch/aRestData.matches*100)/100,
 				golsScore : aRestData.golsScore ,
-				golsScorePerMatch : Math.ceil(aRestData.golsScore /aRestData.matches*100)/100,
+				golsScorePerMatch : Math.round(aRestData.golsScore /aRestData.matches*100)/100,
 				golsLose : aRestData.golsLose,
-				golsLosePerMatch : Math.ceil(aRestData.golsLose/aRestData.matches*100)/100,
+				golsLosePerMatch : Math.round(aRestData.golsLose/aRestData.matches*100)/100,
 			};
+
+			for(let i=0;i<Object.values(aRestData).length;i++){
+				if(isNaN(Object.values(aRestData)[i])){
+					let key = Object.keys(aRestData)[i];
+					aRestData[key]=0
+				}
+			}
 			return aRestData;
 		},
 

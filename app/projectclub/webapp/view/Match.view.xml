@@ -6,192 +6,641 @@
 	xmlns:f="sap.ui.layout.form"
 	xmlns:tnt="sap.tnt"
 	xmlns:l="sap.ui.layout">
-    <Toolbar id="header" height="85px" >
-		<core:Icon id="soccerIcon" src="sap-icon://soccer" size="300%"/>
-		<Title id="headerTitle" text="SOCCER" level="H6" />
-		<ToolbarSpacer id="_headerToolbarSpacer"/>
-		<core:Icon id="searchIcon" src="sap-icon://search" size="300%"/>
-		<core:Icon id="profileIcon" src="sap-icon://person-placeholder" size="300%"/>
-	</Toolbar>
-	<SplitApp 
-        id="matchApp"
-        initialDetail="detail"
-        initialMaster="master">
-        <masterPages>
-            <Page
-				id="masterMatchPage"
-				title="{i18n>NavigationListTitle}"
-				backgroundDesign= "List">
-				<tnt:NavigationList
-                    id="navigationLis"
-                    width="320px"
-                    selectedKey="subItem3">
-					<tnt:NavigationListItem 
-						id="eventPage" icon="add" text="{i18n>CreateEvent}" select="onCreateEvent">
-					</tnt:NavigationListItem>
-				</tnt:NavigationList>
-                <tnt:NavigationList
-                    id="navigationList"
-                    width="320px"
-                    selectedKey="subItem3"
-					items = "{/Ligi}">
-                    <tnt:NavigationListItem 
-						id="_LigiNavigationListItem" 
-                        text="{name}" 
-                        key="rootItem1" 
-                        icon="sap-icon://employee"
-						select="onTablePage">
-                    </tnt:NavigationListItem>
-                </tnt:NavigationList>
-			</Page>
-        </masterPages>
-        <detailPages>
-			<Page 
-                id="detailMatchPage"
-                showNavButton="true"
-		        navButtonPress="onNavBack"
-                title="{i18n>MatchCreationMenu}">
-				<f:SimpleForm 
-					id="matchSimpleFrom"
-					layout="ResponsiveGridLayout"
-					labelSpanXL="1"
-					labelSpanL="1"
-					labelSpanM="1"
-					labelSpanS="1"
-					columnsXL="21"
-					columnsL="21"
-					columnsM="21"
-					singleContainerFullSize="true">
-					<f:content>
-						<Label id="dataStatsLabel" text="{i18n>EventDate}"/>
-						<Text id="leagueName" text="{league}: round {round}" textAlign="Center"/>
+	<Page 
+		id="detailMatchPage"
+		showNavButton="true"
+		navButtonPress="onNavBack"
+		title="{i18n>MatchCreationMenu}">
+		<f:SimpleForm 
+			id="matchSimpleFrom"
+			layout="ResponsiveGridLayout"
+			labelSpanXL="1"
+			labelSpanL="1"
+			labelSpanM="1"
+			labelSpanS="1"
+			columnsXL="51"
+			columnsL="51"
+			columnsM="51"
+			singleContainerFullSize="true">
+			<f:content>
+				<Label id="roundOfLeagueLabel" text=""/>
+				
+				<Text id="roundOfLeagueName" text="{league}: round {round} " textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData13" span="XL9 L9 M9 S9" />
+					</layoutData>
+				</Text>
 
-						<Label id="roundAndLeagueStatsLabel" text="{i18n>Round/League}" />
-						
-						<VBox id="homeNameVbox" >
-							<Text id="homeName" text="{homeName} "/>
-						</VBox>
-						<VBox id="dateEventVbox" >
-						 	<Text id="dateEvent" text="{dateEvent}"/>
-							<Title id="titleResult" text="{homeGols}-{awayGols}" titleStyle="H1"/>
-						</VBox>
-						<VBox id="awayNameVbox" >
-						 	
-							<Text id="awayName" text=" {awayName}"/>
-						</VBox>
-						
-						<Label id="homeNameStatsLabel" text="{i18n>Clubs}" />
-						<ComboBox id="statsHomeNameComboBox"  
-							items="{
-							path: '/Clubs',
-							sorter: { path: 'name' }
-							}"
-							editable="false"
-							textAlign="Center">
-							<core:Item id="statsHomeNameComboBoxItem" text="{name}" key="{ID}"/>
-							<layoutData>
-								<l:GridData id="_IDGenGridData2" span="XL4 L4 M4 S4" />
-							</layoutData>
-						</ComboBox>
-						<ComboBox id="statsAwayNameComboBox"  
-							items="{
-							path: '/Clubs',
-							sorter: { path: 'name' }
-							}"
-							editable="false"
-							textAlign="Center">
-							<core:Item id="statsAwayNameComboBoxItem" text="{name}" key="{ID}"/>
-							<layoutData>
-								<l:GridData id="_IDGenGridData11" span="XL4 L4 M4 S4" />
-							</layoutData>
-						</ComboBox>
-						<Label id="golsStatsLabel" text="{i18n>Goals}"/>
-						<StepInput
-							id="homeGolsStepInput"
-							value="0"
-							min="0"
-							max="40"
-							textAlign="Center" >
-							<layoutData>
-								<l:GridData id="_IDGenGridData3" span="XL4 L4 M4 S4" />
-							</layoutData>
-						</StepInput>
-						<StepInput 
-							id="awayGolsStepInput"
-							value="0"
-							min="0"
-							max="40"
-							textAlign="Center">
-							<layoutData>
-								<l:GridData id="_IDGenGridData10" span="XL4 L4 M4 S4" />
-							</layoutData>
-						</StepInput>
-						<Label id="nextStatsLabel" text="{i18n>CornerKicks}"/>
-						<StepInput 
-							id="homeCornersStepInput"
-							value="0"
-							min="0"
-							max="40"
-							textAlign="Center">
-							<layoutData>
-								<l:GridData id="_IDGenGridData6" span="XL4 L4 M4 S4" />
-							</layoutData>
-						</StepInput>
-						<StepInput 
-							id="awayCornersStepInput"
-							value="0"
-							min="0"
-							max="40"
-							textAlign="Center">
-							<layoutData>
-								<l:GridData id="_IDGenGridData7" span="XL4 L4 M4 S4" />
-							</layoutData>
-						</StepInput>
-						<Label id="YCStatsLabel" text="{i18n>YellowCards}"/>
-						<StepInput 
-							id="homeYCStepInput"
-							value="0"
-							min="0"
-							max="40"
-							textAlign="Center">
-							<layoutData>
-								<l:GridData id="_IDGenGridData4" span="XL4 L4 M4 S4" />
-							</layoutData>
-						</StepInput>
-						<StepInput 
-							id="awayYCStepInput"
-							value="0"
-							min="0"
-							max="40"
-							textAlign="Center">
-							<layoutData>
-								<l:GridData id="_IDGenGridData9" span="XL4 L4 M4 S4" />
-							</layoutData>
-						</StepInput>
-						<Label id="CornersStatsLabel" text="{i18n>RedCards}"/>
-						<StepInput 
-							id="homeRCStepInput"
-							value="0"
-							min="0"
-							max="40"
-							textAlign="Center">
-							<layoutData>
-								<l:GridData id="_IDGenGridData5" span="XL4 L4 M4 S4" />
-							</layoutData>
-						</StepInput>
-						<StepInput 
-							id="awayRCStepInput"
-							value="0"
-							min="0"
-							max="40"
-							textAlign="Center">
-							<layoutData>
-								<l:GridData id="_IDGenGridData8" span="XL4 L4 M4 S4" />
-							</layoutData>
-						</StepInput>
-					</f:content>
-				</f:SimpleForm>
-			</Page>
-		</detailPages>
-    </SplitApp>
+				<Label id="stadiumLabel" text=""/>
+				
+				<Text id="stadiumName" text="{homeClub>/stadium} " textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData18" span="XL9 L9 M9 S9" />
+					</layoutData>
+				</Text>
+
+				<Label id="roundAndLeagueStatsLabel" text="" />
+				<VBox id="homeLogoVbox" width="5rem">
+					<Image id="homeClubLogo" src="{homeClub>/logo}" width="5rem" />
+					<layoutData>
+						<l:GridData id="_IDGenGridData11" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</VBox>
+				<VBox id="homeNameVbox" >
+					<Text id="helpText1" text=" "/>
+					<Text id="helpText2" text=" "/>
+					<Text id="helpText3" text=" "/>
+					<Title id="homeName" text="{homeName} " textAlign="Left"/>
+					<layoutData>
+						<l:GridData id="_IDGenGridData12" span="XL3 L3 M3 S3" />
+					</layoutData>
+				</VBox>
+				<VBox id="dateEventVbox" width="4.5rem" >
+					<Text id="dateEvent" text="{dateEvent}" textAlign="Center" />
+					<Title id="titleResult" text="{homeGols}-{awayGols}" titleStyle="H1" textAlign="Center" />
+					<layoutData>
+						<l:GridData id="_IDGenGridData14" span="XL3 L3 M3 S3" />
+					</layoutData>
+				</VBox>
+				
+				<VBox id="awayNameVbox" >
+					
+					<Text id="helpText4" text=" "/>
+					<Text id="helpText5" text=" "/>
+					<Text id="helpText6" text=" "/>
+					<Title id="awayName" text=" {awayName}" textAlign="Right" />
+					<layoutData>
+						<l:GridData id="_IDGenGridData15" span="XL2 L2 M2 S2" />
+					</layoutData>
+				</VBox>
+				<VBox id="awayLogoVbox" >
+					<Image id="awayClubLogo" src="{awayClub>/logo}" width="5rem"/>
+					
+				</VBox>
+
+				<Label id="resultLabel" text=""/>
+				<Title id="resultName" text="Results" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData19" span="XL9 L9 M9 S9" />
+					</layoutData>
+				</Title>
+
+				<Label id="pauseLabel2" text="" />
+				<Title id="pauseName2" text="" />
+				
+				<Label id="CKLabel" text="" />
+				<Text id="homeCK" text="{homeRR}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData16" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				<Text id="textCK" text="{i18n>CornerKicks}" textAlign="Center"> 
+					<layoutData>
+						<l:GridData id="_IDGenGridData10" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</Text>
+				<Text id="awayCK" text="{awayRR}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData17" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				
+				<Label id="YCLabel" text=""/>
+				<Text id="homeYC" text="{homeYC}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData6" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				<Text id="textYC" text="{i18n>YellowCards}" textAlign="Center"> 
+					<layoutData>
+						<l:GridData id="_IDGenGridData7" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</Text>
+				<Text id="awayYC" text="{awayYC}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData3" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+
+				<Label id="RCLabel" text=""/>
+				<Text id="homeRC" text="{homeRC}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData2" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				<Text id="textRC" text="{i18n>RedCards}" textAlign="Center" > 
+					<layoutData>
+						<l:GridData id="_IDGenGridData1" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</Text>
+				<Text id="awayRC" text="{awayRC}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+
+				<Label id="pauseLabel" text="" />
+				<Title id="pauseName" text="" />
+
+				<Label id="statisticsLabel" text=""/>
+				<Title id="statisticsName" text="Statistics" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData20" span="XL9 L9 M9 S9" />
+					</layoutData>
+				</Title>
+
+				<Label id="pauseLabel1" text="" />
+				<Title id="pauseName1" text="" />
+
+				<Label id="predictionPositionLabel" text="" />
+				<Text id="predictionHomePosition" text="{homeClub>/position}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData21" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				<Text id="predictionTextPosition" text="{i18n>Position}" textAlign="Center"> 
+					<layoutData>
+						<l:GridData id="_IDGenGridData22" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</Text>
+				<Text id="predictionAwayPosition" text="{awayClub>/position}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData23" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				
+				<Label id="predictionPointsLabel" text=""/>
+				<Text id="predictionHomePoints" text="{homeClub>/points}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData24" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				<Text id="predictionTextPoints" text="{i18n>Points}" textAlign="Center"> 
+					<layoutData>
+						<l:GridData id="_IDGenGridData25" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</Text>
+				<Text id="predictionAwayPoints" text="{awayClub>/points}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData26" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+
+				<Label id="predictionMatchesLabel" text=""/>
+				<Text id="predictionMatches" text="{homeClub>/match}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData33" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				<Text id="predictionTextMatches" text="{i18n>Matches}" textAlign="Center" > 
+					<layoutData>
+						<l:GridData id="_IDGenGridData34" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</Text>
+				<Text id="predictionAwayMatches" text="{awayClub>/match}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData35" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+
+				<Label id="predictionWinsLabel" text=""/>
+				<Text id="predictionWins" text="{homeClub>/win}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData36" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				<Text id="predictionTextWins" text="{i18n>Wins}" textAlign="Center" > 
+					<layoutData>
+						<l:GridData id="_IDGenGridData37" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</Text>
+				<Text id="predictionAwayWins" text="{awayClub>/win}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData38" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+
+				<Label id="predictionDrawsLabel" text=""/>
+				<Text id="predictionDraws" text="{homeClub>/draw}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData39" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				<Text id="predictionTextDraws" text="{i18n>Draws}" textAlign="Center" > 
+					<layoutData>
+						<l:GridData id="_IDGenGridData40" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</Text>
+				<Text id="predictionAwayDraws" text="{awayClub>/draw}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData41" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+
+				<Label id="predictionLosesLabel" text=""/>
+				<Text id="predictionLoses" text="{homeClub>/lose}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData42" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				<Text id="predictionTextLoses" text="{i18n>Loses}" textAlign="Center" > 
+					<layoutData>
+						<l:GridData id="_IDGenGridData43" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</Text>
+				<Text id="predictionAwayLoses" text="{awayClub>/lose}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData44" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+
+				<Label id="predictionGolsScoreLabel" text=""/>
+				<Text id="predictionHomeGolsScore" text="{homeClub>/gols_score}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData27" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				<Text id="predictionTextGolsScore" text="{i18n>GolsScore}" textAlign="Center" > 
+					<layoutData>
+						<l:GridData id="_IDGenGridData28" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</Text>
+				<Text id="predictionAwayGolsScore" text="{awayClub>/gols_score}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData29" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+
+				<Label id="predictionGolsLoseLabel" text=""/>
+				<Text id="predictionHomeGolsLose" text="{homeClub>/gols_lose}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData30" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				<Text id="predictionTextGolsLose" text="{i18n>GolsLose}" textAlign="Center" > 
+					<layoutData>
+						<l:GridData id="_IDGenGridData31" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</Text>
+				<Text id="predictionAwayGolsLose" text="{awayClub>/gols_lose}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData32" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+
+				<Label id="pauseLabel5" text="" />
+				<Title id="pauseName5" text="" />
+
+				<Label id="predictionLabel" text=""/>
+				<Title id="predictionName" text="Prediction" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData46" span="XL9 L9 M9 S9" />
+					</layoutData>
+				</Title>
+
+				<Label id="pauseLabel6" text="" />
+				<Title id="pauseName6" text="" />
+
+				<Label id="predictionResultLabel" text="" />
+				<Text id="predictionHomeGols" text="{prediction>/homeGolsScorePerMatch}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData48" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				<Text id="textPredictionGols" text="{i18n>Gols}" textAlign="Center"> 
+					<layoutData>
+						<l:GridData id="_IDGenGridData49" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</Text>
+				<Text id="predictionAwayGols" text="{prediction>/awayGolsScorePerMatch}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData50" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				
+				<Label id="predictionCKLabel" text="" />
+				<Text id="predictionHomeCK" text="{prediction>/homeRRPerMatch}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData51" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				<Text id="textpredictionCK" text="{i18n>CornerKicks}" textAlign="Center"> 
+					<layoutData>
+						<l:GridData id="_IDGenGridData52" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</Text>
+				<Text id="predictionAwayCK" text="{prediction>/awayRRPerMatch}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData53" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				
+				<Label id="prediction1YCLabel" text=""/>
+				<Text id="predictionHomeYC" text="{prediction>/homeYCPerMatch}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData54" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				<Text id="textPredictionYC" text="{i18n>YellowCards}" textAlign="Center"> 
+					<layoutData>
+						<l:GridData id="_IDGenGridData55" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</Text>
+				<Text id="predictionAwayYC" text="{prediction>/awayYCPerMatch}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData56" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+
+				<Label id="prediction1RCLabel" text=""/>
+				<Text id="predictionHomeRC" text="{prediction>/homeRCPerMatch}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData57" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+				<Text id="textPredictionRC" text="{i18n>RedCards}" textAlign="Center" > 
+					<layoutData>
+						<l:GridData id="_IDGenGridData58" span="XL1 L1 M1 S1" />
+					</layoutData>
+				</Text>
+				<Text id="predictionAwayRC" text="{prediction>/awayRCPerMatch}" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData59" span="XL4 L4 M4 S4" />
+					</layoutData>
+				</Text>
+
+				<Label id="pauseLabe2" text="" />
+				<Title id="pauseName3" text="" />
+
+				<Label id="allMatchesLabel" text=""/>
+				<Title id="allMatchesName" text="All Matches" textAlign="Center">
+					<layoutData>
+						<l:GridData id="_IDGenGridData45" span="XL9 L9 M9 S9" />
+					</layoutData>
+				</Title>
+
+				<Label id="pauseLabel3" text="" />
+				<Title id="pauseName4" text="" />
+			</f:content>
+		</f:SimpleForm>
+		<f:SimpleForm id="matchStatsSimpleForm"
+			layout="ResponsiveGridLayout"
+			labelSpanXL="1"
+			labelSpanL="1"
+			labelSpanM="1"
+			labelSpanS="1"
+			columnsXL="2"
+			columnsL="2"
+			columnsM="2">
+			<f:content>
+				<core:Title id="matchStatsTitle" text="All Matches" />
+				<Label id="golsNameLabel" text=""/>
+				<Text id="help17" text=" "/>
+				<Text id="golsName" text="Gols / Match" textAlign="Center"/>
+				<Text id="help18" text=" "/>
+
+				<Label id="golsLabel" text=""/>
+				<Text id="predictionFromHomeGols" text="{homeClubAllMatches>/golsPerMatch}" textAlign="Center"/>
+				<Text id="predictionGols" text="{resultPrediction>/golsPerMatch}" textAlign="Center" />
+				<Text id="predictionFromAwayGols" text="{awayClubAllMatches>/golsPerMatch}" textAlign="Center"/>
+
+				<Label id="golsHomeNameLabel" text=""/>
+				<Text id="help15" text=" "/>
+				<Text id="golsHomeName" text="{homeName} Gols" textAlign="Center"/>
+				<Text id="help16" text=" "/>
+
+				<Label id="golsHomeLabel" text=""/>
+				<Text id="predictionFromHomeGolsHome" text="{homeClubAllMatches>/golsScorePerMatch}" textAlign="Center"/>
+				<Text id="predictionGolsHome" text="{resultPrediction>/homeGolsScorePerMatch}" textAlign="Center" />
+				<Text id="predictionFromAwayGolsHome" text="{awayClubAllMatches>/golsLosePerMatch}" textAlign="Center"/>
+
+				<Label id="golsAwayNameLabel" text=""/>
+				<Text id="help13" text=" "/>
+				<Text id="golsAwayName" text="{awayName} Gols" textAlign="Center"/>
+				<Text id="help14" text=" "/>
+
+				<Label id="golsAwayLabel" text=""/>
+				<Text id="predictionFromHomeGolsAway" text="{homeClubAllMatches>/golsLosePerMatch}" textAlign="Center"/>
+				<Text id="predictionGolsAway" text="{resultPrediction>/awayGolsScorePerMatch}" textAlign="Center" />
+				<Text id="predictionFromAwayGolsAway" text="{awayClubAllMatches>/golsScorePerMatch}" textAlign="Center"/>
+
+				<Label id="RRNameLabel" text=""/>
+				<Text id="help11" text=" "/>
+				<Text id="RRName" text="CK / Match" textAlign="Center"/>
+				<Text id="help12" text=" "/>
+
+				<Label id="predictionRRLabel" text=""/>
+				<Text id="predictionFromHomRR" text="{homeClubAllMatches>/RRPerMatch}" textAlign="Center"/>
+				<Text id="predictionRR" text="{resultPrediction>/RRPerMatch}" textAlign="Center" />
+				<Text id="predictionFromAwayRR" text="{awayClubAllMatches>/RRPerMatch}" textAlign="Center"/>
+
+				<Label id="RRHomeNameLabel" text=""/>
+				<Text id="help9" text=" "/>
+				<Text id="RRHomeName" text="{homeName} CK" textAlign="Center"/>
+				<Text id="help10" text=" "/>
+
+				<Label id="RRHomeLabel" text=""/>
+				<Text id="predictionFromHomeRRHome" text="{homeClubAllMatches>/clubRRPerMatch}" textAlign="Center"/>
+				<Text id="predictionRRHome" text="{resultPrediction>/homeRRPerMatch}" textAlign="Center" />
+				<Text id="predictionFromAwayRRHome" text="{awayClubAllMatches>/enemyRRPerMatch}" textAlign="Center"/>
+
+				<Label id="RRAwayNameLabel" text=""/>
+				<Text id="help7" text=" "/>
+				<Text id="RRAwayName" text="{awayName} CK" textAlign="Center"/>
+				<Text id="help8" text=" "/>
+
+				<Label id="RRAwayLabel" text=""/>
+				<Text id="predictionFromHomeRRAway" text="{homeClubAllMatches>/enemyRRPerMatch}" textAlign="Center"/>
+				<Text id="predictionRRAway" text="{resultPrediction>/awayRRPerMatch}" textAlign="Center" />
+				<Text id="predictionFromAwayRRAway" text="{awayClubAllMatches>/clubRRPerMatch}" textAlign="Center"/>
+
+				<Label id="YCNameLabel" text=""/>
+				<Text id="help5" text=" "/>
+				<Text id="YCName" text="YC / Match" textAlign="Center"/>
+				<Text id="help6" text=" "/>
+
+				<Label id="predictionYCLabel" text=""/>
+				<Text id="predictionFromHomeYC" text="{homeClubAllMatches>/YCPerMatch}" textAlign="Center"/>
+				<Text id="predictionYC" text="{resultPrediction>/YCPerMatch}" textAlign="Center"/>
+				<Text id="predictionFromAwayYC" text="{awayClubAllMatches>/YCPerMatch}" textAlign="Center"/>
+
+				<Label id="YCHomeNameLabel" text=""/>
+				<Text id="help3" text=" "/>
+				<Text id="YCHomeName" text="{homeName} YC" textAlign="Center"/>
+				<Text id="help4" text=" "/>
+
+				<Label id="YCHomeLabel" text=""/>
+				<Text id="predictionFromHomeYCHome" text="{homeClubAllMatches>/clubYCPerMatch}" textAlign="Center"/>
+				<Text id="predictionYCHome" text="{resultPrediction>/homeYCPerMatch}" textAlign="Center" />
+				<Text id="predictionFromAwayYCHome" text="{awayClubAllMatches>/enemyYCPerMatch}" textAlign="Center"/>
+
+				<Label id="YCAwayNameLabel" text=""/>
+				<Text id="help1" text=" "/>
+				<Text id="YCAwayName" text="{awayName} YC" textAlign="Center"/>
+				<Text id="help2" text=" "/>
+
+				<Label id="YCAwayLabel" text=""/>
+				<Text id="predictionFromHomeYCAway" text="{homeClubAllMatches>/enemyYCPerMatch}" textAlign="Center"/>
+				<Text id="predictionYCAway" text="{resultPrediction>/awayYCPerMatch}" textAlign="Center" />
+				<Text id="predictionFromAwayYCAway" text="{awayClubAllMatches>/clubYCPerMatch}" textAlign="Center"/>
+
+				<Label id="RCNameLabel" text=""/>
+				<Text id="help47" text=" "/>
+				<Text id="RCName" text="YC / Match" textAlign="Center"/>
+				<Text id="help48" text=" "/>
+
+				<Label id="predictionRCLabel" text=""/>
+				<Text id="predictionFromHomeRC" text="{homeClubAllMatches>/RCPerMatch}" textAlign="Center"/>
+				<Text id="predictionRC" text="{resultPrediction>/RCPerMatch}" textAlign="Center"/>
+				<Text id="predictionFromAwayRC" text="{awayClubAllMatches>/RCPerMatch}" textAlign="Center"/>
+
+				<Label id="RCHomeNameLabel" text=""/>
+				<Text id="help19" text=" "/>
+				<Text id="RCHomeName" text="{homeName} RC" textAlign="Center"/>
+				<Text id="help20" text=" "/>
+
+				<Label id="RCHomeLabel" text=""/>
+				<Text id="predictionFromHomeRCHome" text="{homeClubAllMatches>/clubRCPerMatch}" textAlign="Center"/>
+				<Text id="predictionRCHome" text="{resultPrediction>/homeRCPerMatch}" textAlign="Center" />
+				<Text id="predictionFromAwayRCHome" text="{awayClubAllMatches>/enemyRCPerMatch}" textAlign="Center"/>
+
+				<Label id="RCAwayNameLabel" text=""/>
+				<Text id="help21" text=" "/>
+				<Text id="RCAwayName" text="{awayName} RC" textAlign="Center"/>
+				<Text id="help22" text=" "/>
+
+				<Label id="RCAwayLabel" text=""/>
+				<Text id="predictionFromHomeRCAway" text="{homeClubAllMatches>/enemyRCPerMatch}" textAlign="Center"/>
+				<Text id="predictionRCAway" text="{resultPrediction>/awayRCPerMatch}" textAlign="Center" />
+				<Text id="predictionFromAwayRCAway" text="{awayClubAllMatches>/clubRCPerMatch}" textAlign="Center"/>
+				
+				<core:Title id="golsStatsTitle" text="Place Matches" />
+				<Label id="golsPlaceNameLabel" text=""/>
+				<Text id="help23" text=" "/>
+				<Text id="golsPlaceName" text="Gols / Match" textAlign="Center"/>
+				<Text id="help24" text=" "/>
+
+				<Label id="golsPlaceLabel" text=""/>
+				<Text id="predictionFromPlaceHomeGols" text="{homeClubHomeMatches>/golsPerMatch}" textAlign="Center"/>
+				<Text id="predictionPlaceGols" text="{placeResultPrediction>/golsPerMatch}" textAlign="Center" />
+				<Text id="predictionFromPlaceAwayGols" text="{awayClubAwayMatches>/golsPerMatch}" textAlign="Center"/>
+
+				<Label id="golsPlaceHomeNameLabel" text=""/>
+				<Text id="help25" text=" "/>
+				<Text id="golsPlaceHomeName" text="{homeName} Gols" textAlign="Center"/>
+				<Text id="help26" text=" "/>
+
+				<Label id="golsPlaceHomeLabel" text=""/>
+				<Text id="predictionFromPlaceHomeGolsHome" text="{homeClubHomeMatches>/golsScorePerMatch}" textAlign="Center"/>
+				<Text id="predictionPlaceGolsHome" text="{placeResultPrediction>/homeGolsScorePerMatch}" textAlign="Center" />
+				<Text id="predictionFromPlaceAwayGolsHome" text="{awayClubAwayMatches>/golsLosePerMatch}" textAlign="Center"/>
+
+				<Label id="golsPlaceAwayNameLabel" text=""/>
+				<Text id="help27" text=" "/>
+				<Text id="golsPlaceAwayName" text="{awayName} Gols" textAlign="Center"/>
+				<Text id="help28" text=" "/>
+
+				<Label id="golsPlaceAwayLabel" text=""/>
+				<Text id="predictionFromPlaceHomeGolsAway" text="{homeClubHomeMatches>/golsLosePerMatch}" textAlign="Center"/>
+				<Text id="predictionPlaceGolsAway" text="{placeResultPrediction>/awayGolsScorePerMatch}" textAlign="Center" />
+				<Text id="predictionFromPlaceAwayGolsAway" text="{awayClubAwayMatches>/golsScorePerMatch}" textAlign="Center"/>
+
+				<Label id="RRNamePlaceLabel" text=""/>
+				<Text id="help29" text=" "/>
+				<Text id="RRPlaceName" text="CK / Match" textAlign="Center"/>
+				<Text id="help30" text=" "/>
+
+				<Label id="predictionPlaceRRLabel" text=""/>
+				<Text id="predictionFromPlaceHomRR" text="{homeClubHomeMatches>/RRPerMatch}" textAlign="Center"/>
+				<Text id="predictionPlaceRR" text="{placeResultPrediction>/RRPerMatch}" textAlign="Center" />
+				<Text id="predictionFromPlaceAwayRR" text="{awayClubAwayMatches>/RRPerMatch}" textAlign="Center"/>
+
+				<Label id="RRPlaceHomeNameLabel" text=""/>
+				<Text id="help31" text=" "/>
+				<Text id="RRPlaceHomeName" text="{homeName} CK" textAlign="Center"/>
+				<Text id="help32" text=" "/>
+
+				<Label id="RRPlaceHomeLabel" text=""/>
+				<Text id="predictionFromPlaceHomeRRHome" text="{homeClubHomeMatches>/clubRRPerMatch}" textAlign="Center"/>
+				<Text id="predictionPlaceRRHome" text="{placeResultPrediction>/homeRRPerMatch}" textAlign="Center" />
+				<Text id="predictionFromPlaceAwayRRHome" text="{awayClubAwayMatches>/enemyRRPerMatch}" textAlign="Center"/>
+
+				<Label id="RRPlaceAwayNameLabel" text=""/>
+				<Text id="help33" text=" "/>
+				<Text id="RRPlaceAwayName" text="{awayName} CK" textAlign="Center"/>
+				<Text id="help34" text=" "/>
+
+				<Label id="RRPlaceAwayLabel" text=""/>
+				<Text id="predictionFromPlaceHomeRRAway" text="{homeClubHomeMatches>/enemyRRPerMatch}" textAlign="Center"/>
+				<Text id="predictionPlaceRRAway" text="{placeResultPrediction>/awayRRPerMatch}" textAlign="Center" />
+				<Text id="predictionFromPlaceAwayRRAway" text="{awayClubAwayMatches>/clubRRPerMatch}" textAlign="Center"/>
+
+				<Label id="YCPlaceNameLabel" text=""/>
+				<Text id="help35" text=" "/>
+				<Text id="YCPlaceName" text="YC / Match" textAlign="Center"/>
+				<Text id="help36" text=" "/>
+
+				<Label id="predictionPlaceYCLabel" text=""/>
+				<Text id="predictionFromPlaceHomeYC" text="{homeClubHomeMatches>/YCPerMatch}" textAlign="Center"/>
+				<Text id="predictionPlaceYC" text="{placeResultPrediction>/YCPerMatch}" textAlign="Center"/>
+				<Text id="predictionFromPlaceAwayYC" text="{awayClubAwayMatches>/YCPerMatch}" textAlign="Center"/>
+
+				<Label id="YCPlaceHomeNameLabel" text=""/>
+				<Text id="help37" text=" "/>
+				<Text id="YCPlaceHomeName" text="{homeName} YC" textAlign="Center"/>
+				<Text id="help38" text=" "/>
+
+				<Label id="YCPlaceHomeLabel" text=""/>
+				<Text id="predictionFromPlaceHomeYCHome" text="{homeClubHomeMatches>/clubYCPerMatch}" textAlign="Center"/>
+				<Text id="predictionPlaceYCHome" text="{placeResultPrediction>/homeYCPerMatch}" textAlign="Center" />
+				<Text id="predictionFromPlaceAwayYCHome" text="{awayClubAwayMatches>/enemyYCPerMatch}" textAlign="Center"/>
+
+				<Label id="YCPlaceAwayNameLabel" text=""/>
+				<Text id="help39" text=" "/>
+				<Text id="YCPlaceAwayName" text="{awayName} YC" textAlign="Center"/>
+				<Text id="help40" text=" "/>
+
+				<Label id="YCPlaceAwayLabel" text=""/>
+				<Text id="predictionFromPlaceHomeYCAway" text="{homeClubHomeMatches>/enemyYCPerMatch}" textAlign="Center"/>
+				<Text id="predictionYCPlaceAway" text="{placeResultPrediction>/awayYCPerMatch}" textAlign="Center" />
+				<Text id="predictionFromPlaceAwayYCAway" text="{awayClubAwayMatches>/clubYCPerMatch}" textAlign="Center"/>
+
+				<Label id="RCPlaceNameLabel" text=""/>
+				<Text id="help41" text=" "/>
+				<Text id="RCPlaceName" text="YC / Match" textAlign="Center"/>
+				<Text id="help42" text=" "/>
+
+				<Label id="predictionPlaceRCLabel" text=""/>
+				<Text id="predictionFromPlaceHomeRC" text="{homeClubHomeMatches>/RCPerMatch}" textAlign="Center"/>
+				<Text id="predictionPlaceRC" text="{placeResultPrediction>/RCPerMatch}" textAlign="Center"/>
+				<Text id="predictionFromPlaceAwayRC" text="{awayClubAwayMatches>/RCPerMatch}" textAlign="Center"/>
+
+				<Label id="RCPlaceHomeNameLabel" text=""/>
+				<Text id="help43" text=" "/>
+				<Text id="RCPlaceHomeName" text="{homeName} RC" textAlign="Center"/>
+				<Text id="help44" text=" "/>
+
+				<Label id="RCPlaceHomeLabel" text=""/>
+				<Text id="predictionFromPlaceHomeRCHome" text="{homeClubHomeMatches>/clubRCPerMatch}" textAlign="Center"/>
+				<Text id="predictionPlaceRCHome" text="{placeResultPrediction>/homeRCPerMatch}" textAlign="Center" />
+				<Text id="predictionFromPlaceAwayRCHome" text="{awayClubAwayMatches>/enemyRCPerMatch}" textAlign="Center"/>
+
+				<Label id="RCPlaceAwayNameLabel" text=""/>
+				<Text id="help45" text=" "/>
+				<Text id="RCPlaceAwayName" text="{awayName} RC" textAlign="Center"/>
+				<Text id="help46" text=" "/>
+
+				<Label id="RCPlaceAwayLabel" text=""/>
+				<Text id="predictionFromPlaceHomeRCAway" text="{homeClubHomeMatches>/enemyRCPerMatch}" textAlign="Center"/>
+				<Text id="predictionPlaceRCAway" text="{placeResultPrediction>/awayRCPerMatch}" textAlign="Center" />
+				<Text id="predictionFromPlaceAwayRCAway" text="{awayClubAwayMatches>/clubRCPerMatch}" textAlign="Center"/>
+			</f:content>
+		</f:SimpleForm>
+		<VBox id="footerVbox" >
+			<Text id="helpText11" text=""/>
+			<Text id="helpText21" text="Ustawienia Prywatności"/>
+			<Text id="helpText31" text="Ustawienia Prywatności"/>
+			<Text id="helpText41" text="Ustawienia Prywatności"/>
+		</VBox>
+	</Page>
 </mvc:View>

@@ -10,17 +10,25 @@ sap.ui.define([
      */
     function (Controller, library, Filter, FilterOperator, BaseController) {
         "use strict";
-        var SortOrder = library.SortOrder;
+        let SortOrder = library.SortOrder;
 
         return BaseController.extend("projectclub.controller.Main_view", {
             onInit: function () {
+                let oRouter = this.getRouter();
+			oRouter.getRoute("main_View").attachPatternMatched(this._onRouteMatched,this);
+            },
 
+            _onRouteMatched: function(oEvent) {
+                this.getView().bindElement({
+                    path : "/Ligi",
+              })
+                let leagueID = oEvent.getParameter("arguments").ID;
+                let leagueName = oEvent.getParameter("arguments").name;
+                this.sortLigi(leagueID,leagueName)
             },
 
             onAfterRendering: function () {
-                this.byId("navigationList").setSelectedItem("container-projectclub---Main_view--_LigiNavigationListItem-container-projectclub---Main_view--navigationList-0")
-                this.byId("table").bindRows({path:`/Ligi(ID=66b64b3f-1520-4cd7-aebd-3c9d95910692)/clubs`});
-                this.sortByPosition();
+                
                 
                 this.getView().byId("title").setTitle("PKO BP Ekstraklasa");
             },
@@ -45,16 +53,15 @@ sap.ui.define([
                 });
             },
 
-            sortLigi: function (oEvent) {
-                let oLiga = oEvent.getSource().getBindingContext().getObject();
-                if(oLiga.ID==="7abf0c3b-1bed-4596-951c-731cbac2aeda"){this.byId("table").setVisibleRowCount(20)}else{this.byId("table").setVisibleRowCount(18)}
-                this.byId("table").bindRows({path:`/Ligi(ID=${oLiga.ID})/clubs`});
+            sortLigi: function (leagueID,leagueName) {
+                if(leagueID==="0f14c421-168c-4461-a3b4-fe1071360890" || leagueID==="5abf0c3b-1bed-4596-951c-731cbac2aeda" || leagueID==="2aef14b4-079c-4d47-916a-9d8021d5355f"){this.byId("table").setVisibleRowCount(20)}else{this.byId("table").setVisibleRowCount(18)}
+                this.byId("table").bindRows({path:`/Ligi(ID=${leagueID})/clubs`});
                 this.clearAllSortings();
-                this.getView().byId("title").setTitle(oLiga.name);
+                this.getView().byId("title").setTitle(leagueName);
             },
 
             clearAllSortings: function() {
-                var oTable = this.byId("table");
+                let oTable = this.byId("table");
                 oTable.getBinding().sort(null);
                 this._resetSortingState();
                 this._bSortColumnDescending = false;
@@ -62,24 +69,24 @@ sap.ui.define([
             },
 
             _resetSortingState: function() {
-                var oTable = this.byId("table");
-                var aColumns = oTable.getColumns();
-                for (var i = 0; i < aColumns.length; i++) {
+                let oTable = this.byId("table");
+                let aColumns = oTable.getColumns();
+                for (let i = 0; i < aColumns.length; i++) {
                     aColumns[i].setSorted(false);
                 }
             
             },
 
             sortByPosition: function() {
-			    var oTable = this.byId("table");
-                var oPositionColumn = this.byId("position");
+			    let oTable = this.byId("table");
+                let oPositionColumn = this.byId("position");
 
                 oTable.sort(oPositionColumn, this._bSortColumnDescending ? SortOrder.Descending : SortOrder.Ascending , false);
                 this._bSortColumnDescending = !this._bSortColumnDescending;
             },
 
             filterGlobally: function(oEvent) {
-                var sQuery = oEvent.getParameter("query");
+                let sQuery = oEvent.getParameter("query");
                 this._oGlobalFilter = null;
                 
                 if (sQuery) {
@@ -99,9 +106,9 @@ sap.ui.define([
                     this.sortByPosition();
                 } else {
                     this._bSortColumnDescending = false;
-                    var oTable = this.byId("table");
-                    var oPositionColumn = this.byId("position");
-                    var sSortProperty;
+                    let oTable = this.byId("table");
+                    let oPositionColumn = this.byId("position");
+                    let sSortProperty;
                     
                     if(oColumnName.getProperty("sortOrder") === "Descending") {
                         sSortProperty = SortOrder.Ascending;

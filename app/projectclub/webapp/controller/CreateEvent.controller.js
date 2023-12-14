@@ -8,13 +8,14 @@ sap.ui.define([
 	'sap/ui/core/date/UI5Date',
     "sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
-], function (Controller,BaseController, MessageBox, MessageToast, JSONModel, library, UI5Date, Filter, FilterOperator) {
+	"sap/ui/core/format/NumberFormat"
+], function (Controller,BaseController, MessageBox, MessageToast, JSONModel, library, UI5Date, Filter, FilterOperator,NumberFormat) {
 	"use strict";
-	var oModel = new JSONModel();
+	let oModel = new JSONModel();
 	return BaseController.extend("projectclub.controller.CreateEvent", {
 
 		onInit: function () {
-			var oTimeModel = new JSONModel();
+			let oTimeModel = new JSONModel();
 			oTimeModel.setData({
 				valueDTP2: UI5Date.getInstance(),
 			});
@@ -40,7 +41,7 @@ sap.ui.define([
 		},
 
 		selectItemName: function(selectID,nameItem){
-			var oList = this.getView().byId(selectID);
+			let oList = this.getView().byId(selectID);
 			let oFirstItem;
 
 			for(let i = 0 ;i<oList.getItems().length ;i++){
@@ -55,7 +56,7 @@ sap.ui.define([
 
 		leagueSelected: function (oEvent) {
 			let oLeagueID = oEvent.getSource().getProperty("selectedKey");
-			var oItemTemplate = new sap.ui.core.ListItem({text:"{name}"});
+			let oItemTemplate = new sap.ui.core.ListItem({text:"{name}"});
 			
 			let oSelect1 = this.byId("homeClubSelect");
 			let oSelect2 = this.byId("awayClubSelect");
@@ -69,7 +70,7 @@ sap.ui.define([
 
 		editLeagueSelected:function() {
 			let oLeagueID = this.byId("editEventLeagueSelect").getSelectedItem().getKey();
-			var oItemTemplate = new sap.ui.core.ListItem({text:"{name}"});
+			let oItemTemplate = new sap.ui.core.ListItem({text:"{name}"});
 			
 			let oSelect1 = this.byId("editHomeClubSelect");
 			let oSelect2 = this.byId("editAwayClubSelect");
@@ -157,8 +158,7 @@ sap.ui.define([
 			let textButton = oEvent.getSource().getId().substr(37);
 			let clubPath = this.byId("eventTable").getContextByIndex(rowIndex).getPath();
 
-			if(textButton==="editEventButton" || textButton==="addEventStatsButtton"){this.onEditOrAddStatsEventButton(clubPath,textButton)}
-			else if(textButton==="deleteEventButton"){this.onDeleteEventButton(clubPath)}
+			this.onEditOrAddStatsEventButton(clubPath,textButton);
 		},
 
 		onEditOrAddStatsEventButton: function(clubPath,textButton) {	
@@ -175,6 +175,7 @@ sap.ui.define([
 					MessageToast.show("Downloading data...");
 					if(textButton==="editEventButton"){that.editDialogOpen(oModel);}
 					else if(textButton==="addEventStatsButtton"){that.addStatsEventDialogOpen(oModel);}
+					else if(textButton==="deleteEventButton"){that.onDeleteEventButton(oModel)}
 				},
 				error: function () {
 					MessageToast.show("Server Send Error");
@@ -182,15 +183,21 @@ sap.ui.define([
 			});
 		},
 
-		onDeleteEventButton: function(clubPath){	
+		onDeleteEventButton: function(oModel){
+			
+			if(oModel.getData().homeGols !== null){
+				MessageBox.error("You cannot delete a played match.", {
+					actions: [ MessageBox.Action.CLOSE]
+				});
+				return;
+			}	
 			let that = this;
 			MessageBox.warning("Are you sure you want to delete the match?", {
 				actions: [MessageBox.Action.YES, MessageBox.Action.CANCEL],
 				onClose: function (sAction) {
 					if(sAction === "YES"){
-						let matchID = clubPath.substr(7,36);
 						$.ajax({
-							url: `/odata/v4/clubapp/Match/${matchID}`,
+							url: `/odata/v4/clubapp/Match/${oModel.getData().ID}`,
 							type: 'DELETE',
 							success: function() {
 								MessageToast.show("Match deleted!");
@@ -206,7 +213,7 @@ sap.ui.define([
 		},
 
 		addStatsEventDialogOpen: function(clubPath){
-			var oDateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+			let oDateFormat = sap.ui.core.format.DateFormat.getDateInstance({
 				pattern: "yyyy-MM-ddTHH:mm:ss"
 			});
 			if(oDateFormat.format(UI5Date.getInstance())<oModel.getData().dateEvent){
@@ -407,7 +414,7 @@ sap.ui.define([
 				});
 				return;
 			}
-			var oEditDialog = this.getView().byId("editDialog");
+			let oEditDialog = this.getView().byId("editDialog");
 			this.selectItemName("editEventLeagueSelect",oModel.getData().league);
 			this.editLeagueSelected();
 			this.byId("eventDataAndTimePickerEdit").setProperty("dateValue",UI5Date.getInstance(oModel.getData().dateEvent));
@@ -496,14 +503,19 @@ sap.ui.define([
 		},
 
 		sortLigi: function (oEvent) {
-			let oLiga = oEvent.getSource().getBindingContext().getObject();
-			this.byId("eventTable").bindRows({path:`/Ligi(ID=${oLiga.ID})/match`});
-			let oColumnData = this.byId("eventDataColumn");
-			this.byId("eventTable").sort(oColumnData, library.SortOrder.Descending,false);
+			let oLiga = oEvent.getParameter("value");
+			console.log(oLiga)
+			this._oLeagueFilter = new Filter({
+				path: "league", 
+				operator: FilterOperator.Contains, 
+				value1: oLiga,
+				caseSensitive: false
+			});
+			this.byId("eventTable").getBinding("rows").filter(this._oLeagueFilter, "Application");
 		},
 
 		filterGlobally: function(oEvent) {
-			var sQuery = oEvent.getParameter("query");
+			let sQuery = oEvent.getParameter("query");
 			this._oGlobalFilter = null;
 			
 			if (sQuery) {
@@ -524,8 +536,18 @@ sap.ui.define([
 			}
 
 			this.byId("eventTable").getBinding("rows").filter(this._oGlobalFilter, "Application");
+		},
+
+		roundSelected:function(){
+			let sQuery = this.byId("roundFilterStepInput").getProperty("value")
+			if(sQuery === 0){this._oRoundFilter = null}
+			else {
+			this._oRoundFilter = new Filter([
+				new Filter("round", FilterOperator.EQ, sQuery)
+			  ])
+			}
+			this.byId("eventTable").getBinding("rows").filter(this._oRoundFilter, "Application");
 		}
-		
 	});
 
 });
