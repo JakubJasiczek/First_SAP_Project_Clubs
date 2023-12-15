@@ -1,5 +1,4 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller",
 	"sap/ui/table/library",
     "projectclub/controller/BaseController",
 	"sap/ui/model/json/JSONModel",
@@ -8,7 +7,7 @@ sap.ui.define([
 	"sap/ui/core/format/DateFormat",
     "sap/ui/model/Filter",
 	"sap/m/MessageToast",
-], function (Controller, library, BaseController, JSONModel, UI5Date, FilterOperator, DateFormat, Filter, MessageToast) {
+], function (library, BaseController, JSONModel, UI5Date, FilterOperator, DateFormat, Filter, MessageToast) {
 	"use strict";
 	let SortOrder = library.SortOrder;
 	let oModel = new JSONModel();
@@ -30,6 +29,7 @@ sap.ui.define([
 				path : "/Clubs(" + oEvent.getParameter("arguments").ID + ")",
 				
 			})
+			this.byId("clubMenuTapBar").setSelectedKey("container-projectclub---clubPage--statsTabFilter")
 			let clubID = oEvent.getParameter("arguments").ID
 			let that = this;
 			$.ajax({

@@ -12,7 +12,10 @@ sap.ui.define([
 		},
 
 		onMatchPage : function (oEvent) {
-			if (oEvent.getParameter("columnId") != this.getView().createId("resultMatchesNameColumn") && oEvent.getParameter("columnId") != this.getView().createId("noResultMatchesNameColumn") && oEvent.getParameter("columnId") != this.getView().createId("eventNameColumn") ) {
+			if (oEvent.getParameter("columnId") != this.getView().createId("resultMatchesNameColumn") && 
+				oEvent.getParameter("columnId") != this.getView().createId("noResultMatchesNameColumn") && 
+				oEvent.getParameter("columnId") != this.getView().createId("eventNameColumn") && 
+				oEvent.getParameter("columnId") != this.getView().createId("clubNameColumn") ) {
 				return; //Custom context menu for product id column only
 			}
 
@@ -49,7 +52,19 @@ sap.ui.define([
 			} else {
 				this.getRouter().navTo("appHome", {}, true /*no history*/);
 			}
-		}
+		},
+
+		openClubPage: function (oEvent) {
+			
+			if (oEvent.getParameter("columnId") !== this.getView().createId("name") ) {
+				return; //Custom context menu for product id column only
+			}
+			
+			let oRowContext = oEvent.getParameter("rowBindingContext").getProperty("ID");
+			this.getRouter().navTo("clubPage",{
+				ID : oRowContext
+			});
+		},
 
 	});
 

@@ -1,5 +1,4 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller",
     "projectclub/controller/BaseController",
 	"sap/m/MessageBox",
 	"sap/m/MessageToast",
@@ -7,9 +6,8 @@ sap.ui.define([
 	"sap/ui/table/library",
 	'sap/ui/core/date/UI5Date',
     "sap/ui/model/Filter",
-	"sap/ui/model/FilterOperator",
-	"sap/ui/core/format/NumberFormat"
-], function (Controller,BaseController, MessageBox, MessageToast, JSONModel, library, UI5Date, Filter, FilterOperator,NumberFormat) {
+	"sap/ui/model/FilterOperator"
+], function (BaseController, MessageBox, MessageToast, JSONModel, library, UI5Date, Filter, FilterOperator) {
 	"use strict";
 	let oModel = new JSONModel();
 	return BaseController.extend("projectclub.controller.CreateEvent", {
@@ -513,12 +511,13 @@ sap.ui.define([
 			this.byId("eventTable").getBinding("rows").filter(this._oLeagueFilter, "Application");
 		},
 
-		filterGlobally: function(oEvent) {
-			let sQuery = oEvent.getParameter("query");
-			this._oGlobalFilter = null;
+		filterGlobally: function() {
+			console.log(this.byId("eventSearch")._lastValue)
+			let sQuery = this.byId("eventSearch")._lastValue;
+			this._oSearchFieldFilter = null;
 			
 			if (sQuery) {
-				this._oGlobalFilter = new Filter([
+				this._oSearchFieldFilter = new Filter([
 					new Filter({
 					path: "homeName", 
 					operator: FilterOperator.Contains, 
@@ -532,9 +531,10 @@ sap.ui.define([
 						caseSensitive: false
 					})
 				])
-			}
+			} else {this._oSearchFieldFilter = null}
 
-			this.byId("eventTable").getBinding("rows").filter(this._oGlobalFilter, "Application");
+
+			this.byId("eventTable").getBinding("rows").filter(this._oSearchFieldFilter, "Application");
 		},
 
 		roundSelected:function(){

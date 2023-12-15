@@ -41,7 +41,7 @@
 
 				<Label id="roundAndLeagueStatsLabel" text="" />
 				<VBox id="homeLogoVbox" width="5rem">
-					<Image id="homeClubLogo" src="{homeClub>/logo}" width="5rem" />
+					<Image id="homeClubLogo" src="{homeClub>/logo}" width="5rem" press="onClubPage" />
 					<layoutData>
 						<l:GridData id="_IDGenGridData11" span="XL1 L1 M1 S1" />
 					</layoutData>
@@ -50,7 +50,7 @@
 					<Text id="helpText1" text=" "/>
 					<Text id="helpText2" text=" "/>
 					<Text id="helpText3" text=" "/>
-					<Title id="homeName" text="{homeName} " textAlign="Left"/>
+					<Title id="homeName" text="{homeName} " textAlign="Left" />
 					<layoutData>
 						<l:GridData id="_IDGenGridData12" span="XL3 L3 M3 S3" />
 					</layoutData>
@@ -74,7 +74,7 @@
 					</layoutData>
 				</VBox>
 				<VBox id="awayLogoVbox" >
-					<Image id="awayClubLogo" src="{awayClub>/logo}" width="5rem"/>
+					<Image id="awayClubLogo" src="{awayClub>/logo}" width="5rem" press="onClubPage"/>
 					
 				</VBox>
 

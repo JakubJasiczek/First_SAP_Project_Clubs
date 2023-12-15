@@ -1,8 +1,7 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller",
     "projectclub/controller/BaseController",
 	'sap/ui/model/json/JSONModel',
-], function (Controller,BaseController,JSONModel) {
+], function (BaseController,JSONModel) {
 	"use strict";
 	let oMatchModel = new JSONModel();
 	let oHomeClubModel = new JSONModel();
@@ -223,6 +222,16 @@ sap.ui.define([
 				awayRCPerMatch : Math.round((aHomeClub.awayRCPerMatch+aAwayClub.awayRCPerMatch)/2),
 			};
 			return aRestData;
+		},
+
+		onClubPage:function(oEvent){
+			let clubID
+			if(oEvent.getSource().mBindingInfos.src.parts[0].model	=== "homeClub"){clubID = oMatchModel.getData().home_ID;}
+			else if(oEvent.getSource().mBindingInfos.src.parts[0].model	=== "awayClub"){clubID = oMatchModel.getData().away_ID;}
+			
+			this.getRouter().navTo("clubPage",{
+				ID : clubID
+			});
 		}
 	});
 

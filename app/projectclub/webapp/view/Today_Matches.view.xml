@@ -3,12 +3,26 @@
 	controllerName="projectclub.controller.Today_Matches"
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc"
-    xmlns:ui="sap.ui.table">
+    xmlns:ui="sap.ui.table"
+    xmlns:u="sap.ui.unified">
     <Page
         id="title"
         title="{i18n>MatchesOfTheDay}"
         backgroundDesign= "Solid"
         enableScrolling="true">
+        <u:CalendarDateInterval
+            id="calendar"
+            width="100%"
+            select="handleCalendarSelect">
+        </u:CalendarDateInterval>
+        <IllustratedMessage
+			id="im"
+			illustrationSize="Scene"
+			enableVerticalResponsiveness="true"
+            title="{i18n>Title}"
+            description="{i18n>Description}"
+            visible="false">
+		</IllustratedMessage>
         <ui:Table
             id="todayMatchesTable"
             selectionMode="None"
@@ -20,7 +34,8 @@
                     }
                 }"
             width="100%"
-            visibleRowCount="1000">
+            visibleRowCount="1000"
+            cellClick="onMatchPage">
             <ui:columns>
                 <ui:Column
                     id="league"
@@ -66,13 +81,6 @@
                 </ui:Column>
             </ui:columns>
         </ui:Table>
-        <IllustratedMessage
-			id="im"
-			illustrationSize="Scene"
-			enableVerticalResponsiveness="true"
-            title="{i18n>Title}"
-            description="{i18n>Description}"
-            visible="false">
-		</IllustratedMessage>
+        
     </Page>
 </mvc:View>

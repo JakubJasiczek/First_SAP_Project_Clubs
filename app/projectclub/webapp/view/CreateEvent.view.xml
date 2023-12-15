@@ -126,7 +126,7 @@
                             }"
                             width="100%"
                             selectionMode="Single"
-                            visibleRowCount="20"
+                            visibleRowCount="10"
                             cellClick="onMatchPage">
                             <tab:rowSettingsTemplate>
                                 <tab:RowSettings id="clubPageResultTableRowSettings" highlight="{= ${homeGols} !== null ? null : 'Error'}" />

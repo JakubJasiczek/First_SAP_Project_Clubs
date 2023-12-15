@@ -1,5 +1,4 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
     "sap/ui/table/library",
     "sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
@@ -8,7 +7,7 @@ sap.ui.define([
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller, library, Filter, FilterOperator, BaseController) {
+    function (library, Filter, FilterOperator, BaseController) {
         "use strict";
         let SortOrder = library.SortOrder;
 
@@ -33,24 +32,9 @@ sap.ui.define([
                 this.getView().byId("title").setTitle("PKO BP Ekstraklasa");
             },
 
-            formatAvailableToObjectState: function(bAvailable) {
-                return bAvailable ? "Success" : "Error";
-            },
-
             refresh: function(){
                 this.byId("table").getBinding("rows").refresh();
                 this.clearAllSortings();
-            },
-
-            openClubPage: function (oEvent) {
-                if (oEvent.getParameter("columnId") != this.getView().createId("name")) {
-                    return; //Custom context menu for product id column only
-                }
-
-                let oRowContext = oEvent.getParameter("rowBindingContext").getProperty("ID");
-                this.getRouter().navTo("clubPage",{
-                    ID : oRowContext
-                });
             },
 
             sortLigi: function (leagueID,leagueName) {
